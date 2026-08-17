@@ -19,7 +19,7 @@ export type CopInput = number | { toString(): string } | null | undefined;
 export function formatCOP(amount: CopInput): string {
   if (amount === null || amount === undefined) return '$ 0';
   const n = typeof amount === 'number' ? amount : Number(amount.toString());
-  if (isNaN(n)) return '$ 0';
+  if (Number.isNaN(n)) return '$ 0';
   const rounded = Math.round(n);
   const sign = rounded < 0 ? '-' : '';
   const abs = Math.abs(rounded).toString();
