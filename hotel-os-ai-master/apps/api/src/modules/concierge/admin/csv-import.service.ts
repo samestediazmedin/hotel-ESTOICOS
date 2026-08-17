@@ -82,7 +82,7 @@ export class CsvImportService {
       if (rawObj.lng != null) rawObj.lng = Number(rawObj.lng);
       if (rawObj.rating != null) {
         const r = Number(rawObj.rating);
-        rawObj.rating = isNaN(r) ? undefined : r;
+        rawObj.rating = Number.isNaN(r) ? undefined : r;
       }
 
       const result = CreateVenueSchema.safeParse(rawObj);
