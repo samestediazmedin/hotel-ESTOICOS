@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "baseUrl": ".",
+    "paths": {
+      "@hotel/shared-kernel": ["../../packages/shared-kernel/src"],
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*", "e2e/**/*", "playwright.config.ts"]
+}

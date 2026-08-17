@@ -1,0 +1,18 @@
+# Gitleaks configuration — secrets scanning allowlist (QSI-19)
+#
+# Default rulesets are enabled. The [allowlist] section suppresses known false
+# positives: placeholder values in .env.example files, JWT-shaped strings in
+# test fixtures, and token-shaped strings in planning documentation.
+
+title = "HotelOS AI gitleaks config"
+
+[allowlist]
+  description = "Known false positives — placeholders, test fixtures, planning docs"
+
+  paths = [
+    '''\.env\.example$''',
+    '''apps/api/src/.+/__tests__/.+''',
+    '''apps/api/src/.+\.spec\.ts$''',
+    '''\.planning/.+\.md$''',
+    '''tests/perf/.+''',
+  ]

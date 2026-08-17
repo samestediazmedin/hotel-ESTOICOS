@@ -1,0 +1,36 @@
+# Dependabot — automated dependency update PRs (QSI-16)
+#
+# npm: weekly Monday PRs for security + patch updates (all workspaces).
+# github-actions: weekly PRs for action version bumps.
+#
+# open-pull-requests-limit: 5 per ecosystem to avoid PR flood.
+# versioning-strategy: increase-if-necessary — avoids unnecessary major bumps.
+
+version: 2
+
+updates:
+  # ── npm (pnpm workspace) ──────────────────────────────────────────────────
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    versioning-strategy: increase-if-necessary
+    labels:
+      - "deps"
+      - "automated"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+
+  # ── GitHub Actions ────────────────────────────────────────────────────────
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "ci"
+      - "automated"
+    commit-message:
+      prefix: "chore(ci)"

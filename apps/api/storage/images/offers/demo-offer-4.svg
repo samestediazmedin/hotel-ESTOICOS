@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#5a4d3f"/>
+  <text x="400" y="280" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#f9f5f0" text-anchor="middle">Paquete Negocios</text>
+  <text x="400" y="340" font-family="Arial, sans-serif" font-size="24" fill="#f9f5f0" text-anchor="middle">Hotel Sumapaz</text>
+  <rect x="250" y="380" width="300" height="4" fill="#f9f5f0" opacity="0.5"/>
+</svg>

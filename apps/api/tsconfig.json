@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "@hotel/shared-kernel": ["../../packages/shared-kernel/src"]
+    },
+    "ignoreDeprecations": "5.0"
+  },
+  "include": ["src/**/*", "prisma/**/*"]
+}

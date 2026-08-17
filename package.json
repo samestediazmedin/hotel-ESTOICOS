@@ -1,0 +1,40 @@
+{
+  "name": "hotel-os",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "test": "turbo test",
+    "typecheck": "turbo typecheck",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "turbo": "^2.0.0",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "packageManager": "pnpm@10.29.2",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@nestjs/core",
+      "@prisma/engines",
+      "@scarf/scarf",
+      "@swc/core",
+      "bcrypt",
+      "esbuild",
+      "prisma",
+      "sharp"
+    ],
+    "overrides": {
+      "tar": ">=7.5.11",
+      "fast-xml-parser": ">=4.5.6",
+      "engine.io": ">=6.6.8",
+      "ws": ">=8.20.1",
+      "qs": ">=6.15.2",
+      "@hono/node-server": ">=1.19.13"
+    }
+  }
+}

@@ -1,0 +1,276 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+# Cancel in-flight runs for the same branch/PR to avoid wasting runner minutes.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '10.29.2'
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────
+  # Single linear job.
+  #
+  # Rationale: the monorepo's packages are small enough (~440 API tests,
+  # ~159 web tests) that parallelism would add orchestration overhead without
+  # meaningful wall-clock savings.  The bottleneck is pnpm install + Prisma
+  # generate (~60 s cold), which every parallel job would have to repeat.
+  # A single job running sequentially keeps the workflow simple, avoids
+  # duplicating the install/cache step, and stays well under the 5-minute
+  # target once the pnpm store is warm.
+  #
+  # If test suites grow significantly, split into parallel jobs at that time.
+  # ─────────────────────────────────────────────────────────────────────────
+  ci:
+    name: Install → Audit → Typecheck → Lint → Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      # ── 1. Checkout ───────────────────────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      # ── 2. pnpm (must come before setup-node to seed the cache path) ──────
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      # ── 3. Node.js with built-in pnpm store cache ─────────────────────────
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      # ── 4. Install (frozen — lockfile must not drift) ─────────────────────
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ── 5. Security audit ─────────────────────────────────────────────────
+      # Blocks on high or critical CVEs only.  Moderate is allowed because
+      # the project actively tracks it via pnpm.overrides (see root package.json).
+      # --prod excludes devDependencies from the audit scope.
+      - name: Audit (high/critical)
+        run: pnpm audit --prod --audit-level=high
+
+      # Prisma client is gitignored — generate it before typecheck/tests
+      - name: Generate Prisma client
+        run: pnpm --filter @hotel/api exec prisma generate
+
+      # ── 6. Typecheck — per workspace ──────────────────────────────────────
+      # Each workspace has its own tsconfig; a single root tsc --noEmit does
+      # not work because paths differ.  Run them in dependency order.
+      - name: Typecheck shared-kernel
+        run: pnpm --filter @hotel/shared-kernel typecheck
+
+      - name: Typecheck api
+        run: pnpm --filter @hotel/api typecheck
+
+      - name: Typecheck web
+        run: pnpm --filter @hotel/web typecheck
+
+      # ── 7. Lint ───────────────────────────────────────────────────────────
+      # NOTE: 48 pre-existing ESLint errors exist in apps/web (carry-forward
+      # from before milestone v1.4).  They are documented and deferred to a
+      # dedicated lint-polish phase.  This step is intentionally NON-BLOCKING
+      # (continue-on-error: true) until those errors are resolved.
+      # Once the lint-polish phase is complete, remove continue-on-error.
+      - name: Lint web (non-blocking — pre-existing errors)
+        run: pnpm --filter @hotel/web lint
+        continue-on-error: true
+
+      # ── 8. Tests ──────────────────────────────────────────────────────────
+      # --run forces Vitest into non-watch mode (CI mode).
+      - name: Test api (440 tests)
+        run: pnpm --filter @hotel/api test -- --run
+
+      - name: Test web (159 tests)
+        run: pnpm --filter @hotel/web test -- --run
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # E2E — Playwright critical flows + responsive smoke + error boundary
+  #
+  # Runs ONLY on pull requests to save CI minutes.  Depends on the ci job
+  # passing first (unit tests, typecheck, audit).
+  #
+  # Needs: PostgreSQL service for the API, Chromium for Playwright.
+  # ─────────────────────────────────────────────────────────────────────────
+  e2e:
+    name: E2E (Playwright)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    needs: [ci]
+    timeout-minutes: 15
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: hotel
+          POSTGRES_PASSWORD: hotel
+          POSTGRES_DB: hotel_e2e
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U hotel"
+          --health-interval=5s
+          --health-timeout=3s
+          --health-retries=5
+
+    env:
+      DATABASE_URL: postgresql://hotel:hotel@localhost:5432/hotel_e2e
+      DIRECT_DATABASE_URL: postgresql://hotel:hotel@localhost:5432/hotel_e2e
+      JWT_SECRET: e2e-jwt-secret-not-for-production
+      JWT_REFRESH_SECRET: e2e-refresh-secret-not-for-production
+      SEED_ADMIN_EMAIL: admin@hotelsumapaz.co
+      SEED_ADMIN_PASSWORD: Admin123!
+      HOTEL_TIMEZONE: America/Bogota
+      IVA_RATE: '0.19'
+      HOTEL_NAME: Hotel Sumapaz
+      E2E_ADMIN_EMAIL: admin@hotelsumapaz.co
+      E2E_ADMIN_PASSWORD: Admin123!
+      PORT: '3001'
+      API_URL: 'http://localhost:3001'
+
+    steps:
+      # ── 1. Checkout ─────────────────────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      # ── 2. pnpm ─────────────────────────────────────────────────────────
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      # ── 3. Node.js ──────────────────────────────────────────────────────
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      # ── 4. Install ──────────────────────────────────────────────────────
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ── 5. Build web (required for Vite preview) ────────────────────────
+      - name: Build web
+        run: pnpm --filter @hotel/web build
+
+      # ── 6. Install Playwright browsers ──────────────────────────────────
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('apps/web/package.json') }}
+
+      - name: Install Playwright Chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+        working-directory: apps/web
+
+      - name: Install Playwright system deps
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+        working-directory: apps/web
+
+      # ── 7. Database setup ───────────────────────────────────────────────
+      - name: Run Prisma migrations
+        run: npx prisma migrate deploy
+        working-directory: apps/api
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+        working-directory: apps/api
+
+      - name: Seed admin user
+        run: npx ts-node prisma/seed-admin.ts seed:admin
+        working-directory: apps/api
+
+      - name: Seed room types + rooms (E2E data)
+        run: npx ts-node prisma/seed-e2e.ts
+        working-directory: apps/api
+
+      # ── 8. Start API in background ──────────────────────────────────────
+      - name: Start API
+        run: |
+          pnpm --filter @hotel/api dev &
+          # Wait for API to be ready
+          for i in $(seq 1 30); do
+            curl -s http://localhost:3001/api/health > /dev/null 2>&1 && break
+            sleep 2
+          done
+
+      # ── 9. Run Playwright tests ─────────────────────────────────────────
+      - name: Run E2E tests
+        run: npx playwright test
+        working-directory: apps/web
+
+      # ── 10. Upload report on failure ────────────────────────────────────
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report/
+          retention-days: 14
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Security — SAST (Semgrep) + secrets sweep (gitleaks)
+  #
+  # Runs on every push and PR. No dependency on the ci job — runs in parallel
+  # to avoid slowing the main feedback loop.
+  #
+  # QSI-17: Semgrep with p/security-audit + p/typescript rulesets.
+  #         Blocks only on ERROR severity (HIGH). MEDIUM/LOW are informational.
+  # QSI-19: Gitleaks scans the diff for accidentally committed secrets.
+  #         Allowlist defined in .gitleaks.toml.
+  # ─────────────────────────────────────────────────────────────────────────
+  security:
+    name: Security (Semgrep + gitleaks)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      # ── 1. Checkout (full history for gitleaks) ─────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      # ── 2. Semgrep SAST ─────────────────────────────────────────────────
+      # Rulesets: p/security-audit (general SAST) + p/typescript (TS-specific)
+      # Severity gate: only ERROR (Semgrep's HIGH equivalent) blocks the PR.
+      # SEMGREP_APP_TOKEN is optional — without it Semgrep runs locally and
+      # reports findings via exit code. With it, results also appear in the
+      # Semgrep Cloud UI.
+      - name: Semgrep SAST
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/typescript
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+
+      # ── 3. Gitleaks secrets sweep ───────────────────────────────────────
+      # Scans the full git history for leaked secrets. Allowlist in .gitleaks.toml
+      # suppresses known false positives (.env.example, test fixtures, docs).
+      - name: Gitleaks secrets sweep
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          args: --config=.gitleaks.toml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

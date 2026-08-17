@@ -1,0 +1,11 @@
+node_modules
+.git
+.gitkeep
+*.log
+.planning
+.husky
+.turbo
+.env
+.env.example
+.gitleaks.toml
+CLAUDE.md

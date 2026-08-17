@@ -1,0 +1,802 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                       String                  @id @default(cuid())
+  email                    String                  @unique
+  name                     String
+  passwordHash             String
+  role                     UserRole                @default(RECEPTION)
+  status                   UserStatus              @default(ACTIVE)
+  isActive                 Boolean                 @default(true)
+  mustChangePassword       Boolean                 @default(false)
+  lastPasswordChange       DateTime?
+  createdAt                DateTime                @default(now())
+  updatedAt                DateTime                @updatedAt
+  conversations            AIConversation[]
+  aiToolCallLogs           AIToolCallLog[]
+  postedFolioItems         FolioItem[]
+  housekeepingAssignments  HousekeepingTask[]      @relation("AssignedTo")
+  housekeepingTasksCreated HousekeepingTask[]      @relation("CreatedBy")
+  loginAttempts            LoginAttempt[]
+  refreshTokens            RefreshToken[]
+  systemConfigChangeLogs   SystemConfigChangeLog[]
+  guestContactEvents       GuestContactEvent[]
+  auditLogsAsActor         AuditLog[]              @relation("AuditLogActor")
+  auditLogsAsTarget        AuditLog[]              @relation("AuditLogTarget")
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id         String   @id @default(cuid())
+  token      String   @unique
+  userId     String
+  deviceInfo String?
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model LoginAttempt {
+  id        String    @id @default(cuid())
+  email     String
+  ip        String
+  count     Int       @default(1)
+  blockedAt DateTime?
+  expiresAt DateTime?
+  updatedAt DateTime  @updatedAt
+  userId    String?
+  user      User?     @relation(fields: [userId], references: [id])
+
+  @@unique([email, ip])
+  @@index([expiresAt])
+  @@map("login_attempts")
+}
+
+model SystemConfig {
+  id                   String   @id @default(cuid())
+  hotelBusinessDate    DateTime @db.Date
+  hotelTimezone        String
+  ivaRate              Decimal  @db.Decimal(5, 4)
+  hotelName            String   @default("Hotel Sumapaz")
+  hotelLogoUrl         String?
+  updatedAt            DateTime @updatedAt
+  tagline              String?
+  description          String?
+  phone                String?
+  tags                 String[] @default([])
+  address              String?
+  // 2026-05-29 — Controls whether the public homepage shows prices with 19% IVA
+  // already included (true) or shows the bare base price (false).
+  // Toggled by ADMIN in the Configuración page. Does NOT affect the booking flow
+  // (rate-options already computes the full breakdown with IVA).
+  displayPricesWithIva Boolean  @default(true)
+
+  @@map("system_config")
+}
+
+model SystemConfigChangeLog {
+  id            String   @id @default(cuid())
+  userId        String
+  fieldsChanged String[]
+  before        Json
+  after         Json
+  changedAt     DateTime @default(now())
+  user          User     @relation(fields: [userId], references: [id])
+
+  @@index([changedAt])
+  @@map("system_config_change_log")
+}
+
+model RoomType {
+  id           String     @id @default(cuid())
+  name         String
+  description  String?
+  basePrice    Decimal    @db.Decimal(12, 2)
+  maxOccupancy Int
+  amenities    String[]
+  isActive     Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  isPublished  Boolean    @default(true)
+  ratePlans    RatePlan[]
+  rooms        Room[]
+  photos       RoomTypePhoto[]
+  offers       Offer[]
+  // 2026-05-29 — Seasons moved from RatePlan to RoomType (shared by all plans for this type)
+  seasons      Season[]
+
+  @@map("room_types")
+}
+
+model Room {
+  id                String             @id @default(cuid())
+  number            String             @unique
+  floor             Int
+  roomTypeId        String
+  physicalStatus    PhysicalStatus     @default(AVAILABLE)
+  cleaningStatus    CleaningStatus     @default(CLEAN)
+  notes             String?
+  isActive          Boolean            @default(true)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  housekeepingTasks HousekeepingTask[]
+  reservations      Reservation[]
+  photos            RoomPhoto[]
+  roomType          RoomType           @relation(fields: [roomTypeId], references: [id])
+
+  @@map("rooms")
+}
+
+model RoomPhoto {
+  id          String   @id @default(cuid())
+  roomId      String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  key         String   @unique
+  contentType String?
+  size        Int?
+  room        Room     @relation(fields: [roomId], references: [id])
+
+  @@map("room_photos")
+}
+
+model HotelPhoto {
+  id           String   @id @default(cuid())
+  url          String
+  alt          String   @default("")
+  displayOrder Int      @default(0)
+  createdAt   DateTime @default(now())
+  key          String?
+
+  @@index([displayOrder])
+  @@map("hotel_photos")
+}
+
+model RatePlan {
+  id          String          @id @default(cuid())
+  name        String
+  type        String
+  roomTypeId  String
+  isActive    Boolean         @default(true)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  // 2026-05-29 — human-readable description shown to the guest on the rate selector
+  description String?         @db.VarChar(500)
+  // 2026-05-29 — per-plan price modifier on top of season multiplier.
+  // Formula: nightRate = round(basePrice × seasonMultiplier × priceModifier)
+  // 1.0 = no adjustment (BAR), <1.0 = discount (PROMO), >1.0 = premium.
+  priceModifier Decimal       @db.Decimal(5, 4) @default(1.0)
+  roomType    RoomType        @relation(fields: [roomTypeId], references: [id])
+  extras      RatePlanExtra[]
+  rules       RateRule[]
+  reservations Reservation[]
+
+  @@map("rate_plans")
+}
+
+/// RatePlanExtra — money line items bundled with a rate plan (e.g. breakfast,
+/// late checkout). Each extra is computed per the pricingMode and added on top
+/// of the nightly room charge when a guest selects this plan.
+/// pricingMode values: "PER_STAY" | "PER_NIGHT" | "PER_PERSON_PER_NIGHT"
+model RatePlanExtra {
+  id          String   @id @default(cuid())
+  ratePlanId  String
+  name        String   @db.VarChar(120)
+  amount      Decimal  @db.Decimal(10, 2)
+  pricingMode String   // "PER_STAY" | "PER_NIGHT" | "PER_PERSON_PER_NIGHT"
+  createdAt   DateTime @default(now())
+  ratePlan    RatePlan @relation(fields: [ratePlanId], references: [id], onDelete: Cascade)
+
+  @@index([ratePlanId])
+  @@map("rate_plan_extras")
+}
+
+model Season {
+  id         String   @id @default(cuid())
+  // 2026-05-29 — moved from ratePlanId to roomTypeId.
+  // Seasons are a property of the room type, shared by ALL its rate plans.
+  // Per-plan pricing differentiation is now done via RatePlan.priceModifier.
+  roomTypeId String
+  name       String
+  startDate  DateTime @db.Date
+  endDate    DateTime @db.Date
+  multiplier Decimal  @db.Decimal(5, 4)
+  minNights  Int      @default(1)
+  createdAt  DateTime @default(now())
+  roomType   RoomType @relation(fields: [roomTypeId], references: [id], onDelete: Cascade)
+
+  @@index([roomTypeId])
+  @@map("seasons")
+}
+
+model RateRule {
+  id         String   @id @default(cuid())
+  ratePlanId String
+  type       String
+  priority   Int      @default(0)
+  conditions Json
+  value      Decimal  @db.Decimal(10, 4)
+  createdAt  DateTime @default(now())
+  ratePlan   RatePlan @relation(fields: [ratePlanId], references: [id])
+
+  @@map("rate_rules")
+}
+
+model Guest {
+  id             String        @id @default(cuid())
+  fullName       String
+  email          String?
+  phone          String?
+  documentType   String
+  documentNumber String
+  nationality    String
+  dateOfBirth    DateTime      @db.Date
+  anonymizedAt   DateTime?
+  // Phase 15 — Extended contact capture (GCC-01, GCC-02)
+  preferredLanguage   String             @default("es") @db.VarChar(8)
+  contactPreference   ContactPreference?
+  whatsappNumber      String?            @db.VarChar(16)
+  marketingConsent    Boolean            @default(false)
+  dietaryRestrictions String?            @db.VarChar(500)
+  specialRequests     String?            @db.VarChar(1000)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  reservations   Reservation[]
+  contactEvents  GuestContactEvent[]
+
+  @@map("guests")
+}
+
+model Reservation {
+  id           String            @id @default(cuid())
+  guestId      String
+  roomId       String?
+  roomTypeId   String
+  checkInDate  DateTime          @db.Date
+  checkOutDate DateTime          @db.Date
+  status       ReservationStatus @default(CONFIRMED)
+  source       ReservationSource @default(DIRECT)
+  adults       Int               @default(1)
+  children     Int               @default(0)
+  notes        String?
+  totalNights  Int
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  // 2026-05-28 — Public bookings can originate from a published offer.
+  // Stored so the admin sees "Vino por: <offer.title>" when contacting the guest.
+  sourceOfferId        String?
+  sourceOffer          Offer?            @relation(fields: [sourceOfferId], references: [id], onDelete: SetNull)
+  // 2026-05-29 — Rate plan selected by the guest (PROMO / PACKAGE / BAR).
+  // Null means the booking used the implicit BAR rate (backward compatible).
+  // onDelete: SetNull — if the plan is deleted, the reservation stays intact.
+  ratePlanId           String?
+  ratePlan             RatePlan?         @relation(fields: [ratePlanId], references: [id], onDelete: SetNull)
+  folio                Folio?
+  guest                Guest             @relation(fields: [guestId], references: [id])
+  room                 Room?             @relation(fields: [roomId], references: [id])
+  roomType             RoomType          @relation(fields: [roomTypeId], references: [id])
+  stays                Stay[]
+  reviews              Review[]
+  reviewInviteSentAt   DateTime?
+  reviewTokenJtiUsed   String?           @unique
+  // Phase 24 — Pre-arrival reminder tracking (REM-01, REM-02)
+  // Set when the cron successfully sends the reminder email.
+  // Null means the reminder has not been sent yet.
+  reminderSentAt       DateTime?
+  // Phase 26 — Online reservation completion tracking (ORC-01, ORC-02)
+  // PENDING = reservation initiated but not completed (e.g., abandoned booking)
+  // COMPLETED = reservation fully processed
+  // EXPIRED = PENDING reservation older than 24h
+  completionStatus     CompletionStatus  @default(COMPLETED)
+  // Phase 3 concierge: one-review-per-stay guard for the cédula+apellido verified flow.
+  // Set atomically (in a transaction) when a review is created via the concierge chat.
+  // @unique → Prisma P2002 on double-submit → 409 Conflict.
+  // Completely independent of reviewTokenJtiUsed (used by the email-token flow).
+  conciergeReviewToken String?           @unique
+
+  @@index([roomId, checkInDate, checkOutDate])
+  @@index([status, checkInDate])
+  @@index([sourceOfferId])
+  @@index([ratePlanId])
+  @@map("reservations")
+}
+
+model Stay {
+  id            String      @id @default(cuid())
+  reservationId String
+  roomId        String
+  arrivedAt     DateTime
+  departedAt    DateTime?
+  createdAt     DateTime    @default(now())
+  reservation   Reservation @relation(fields: [reservationId], references: [id])
+
+  @@map("stays")
+}
+
+model Folio {
+  id            String      @id @default(cuid())
+  reservationId String      @unique
+  isOpen        Boolean     @default(true)
+  closedAt      DateTime?
+  snapshotHash  String?
+  snapshotTotal Decimal?    @db.Decimal(12, 2)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  items         FolioItem[]
+  reservation   Reservation @relation(fields: [reservationId], references: [id])
+
+  @@map("folios")
+}
+
+model FolioItem {
+  id              String         @id @default(cuid())
+  folioId         String
+  type            FolioEntryType
+  description     String
+  quantity        Int            @default(1)
+  unitPrice       Decimal        @db.Decimal(12, 2)
+  amount          Decimal        @db.Decimal(12, 2)
+  taxRate         Decimal        @db.Decimal(5, 4)
+  taxAmount       Decimal        @db.Decimal(12, 2)
+  postedAt        DateTime       @default(now())
+  postedByUserId  String
+  voidedByEntryId String?
+  businessDate    DateTime       @db.Date
+  folio           Folio          @relation(fields: [folioId], references: [id])
+  postedBy        User           @relation(fields: [postedByUserId], references: [id])
+
+  @@map("folio_items")
+}
+
+model DailySnapshot {
+  id              String   @id @default(cuid())
+  businessDate    DateTime @unique @db.Date
+  totalRooms      Int
+  occupiedRooms   Int
+  occupancyPct    Decimal  @db.Decimal(5, 4)
+  adr             Decimal  @db.Decimal(12, 2)
+  revpar          Decimal  @db.Decimal(12, 2)
+  totalRevenue    Decimal  @db.Decimal(12, 2)
+  arrivalsCount   Int
+  departuresCount Int
+  noShowCount     Int
+  createdAt       DateTime @default(now())
+
+  @@map("daily_snapshots")
+}
+
+model HousekeepingTask {
+  id           String                 @id @default(cuid())
+  roomId       String
+  assignedToId String?
+  priority     HousekeepingPriority   @default(MEDIUM)
+  notes        String?
+  completedAt  DateTime?
+  businessDate DateTime               @db.Date
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+  status       HousekeepingTaskStatus @default(OPEN)
+  createdById  String                 @default("")
+  assignedTo   User?                  @relation("AssignedTo", fields: [assignedToId], references: [id])
+  createdBy    User                   @relation("CreatedBy", fields: [createdById], references: [id])
+  room         Room                   @relation(fields: [roomId], references: [id])
+
+  @@index([createdById])
+  @@map("housekeeping_tasks")
+}
+
+model AIConversation {
+  id            String      @id @default(cuid())
+  userId        String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  title         String?
+  lastMessageAt DateTime?
+  user          User        @relation(fields: [userId], references: [id])
+  messages      AIMessage[]
+
+  @@index([userId, lastMessageAt(sort: Desc)])
+  @@map("ai_conversations")
+}
+
+model AIMessage {
+  id             String         @id @default(cuid())
+  conversationId String
+  role           String
+  content        String
+  toolCallsJson  Json?
+  createdAt      DateTime       @default(now())
+  conversation   AIConversation @relation(fields: [conversationId], references: [id])
+
+  @@map("ai_messages")
+}
+
+/// *
+///  * AIToolCallLog — immutable audit record for every tool invocation (AI-09).
+///  * Written in try/finally — row is inserted REGARDLESS of whether the tool
+///  * succeeded, threw a runtime error, or failed Zod validation.
+///  * outputJson intentionally omitted — tool results may contain guest PII
+///  * (names, folio totals). outputStatus + errorMsg + durationMs are sufficient
+///  * for compliance auditing.
+model AIToolCallLog {
+  id             String   @id @default(cuid())
+  userId         String
+  conversationId String?
+  toolName       String
+  inputJson      Json
+  outputStatus   String
+  errorMsg       String?
+  durationMs     Int?
+  executedAt     DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id], onUpdate: NoAction)
+
+  @@index([userId, executedAt(sort: Desc)])
+  @@map("ai_tool_call_logs")
+}
+
+/// *
+///  * TraExportLog — immutable audit record of each TRA CSV export.
+///  * One row per export request.
+///  * rowCount reflects the number of Stay rows included in the generated CSV.
+///  * LOW CONFIDENCE NOTE (TRA format spec):
+///  * The CSV format (semicolon delimiter, UTF-8 BOM, DD/MM/YYYY) is a best-effort
+///  * approximation of Colombian tourism authority requirements. The hotel owner must
+///  * verify the exact format with COTELCO or the local alcaldía before first
+///  * production use.
+model TraExportLog {
+  id          String   @id @default(cuid())
+  userId      String
+  fromDate    DateTime @db.Date
+  toDate      DateTime @db.Date
+  rowCount    Int
+  generatedAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("tra_export_log")
+}
+
+/// *
+///  * NightAuditRun — idempotency log for the night audit cron.
+///  * businessDate is UNIQUE — prevents re-running a COMPLETED audit for the same date.
+///  * Combined with per-folio per-businessDate ROOM_CHARGE existence check (two-layer
+///  * idempotency as per RESEARCH section 3.4 / Pitfall P3).
+///  * Status lifecycle: IN_PROGRESS → COMPLETED | FAILED
+model NightAuditRun {
+  id                  String    @id @default(cuid())
+  businessDate        DateTime  @unique @db.Date
+  status              String    @default("IN_PROGRESS")
+  openFoliosProcessed Int       @default(0)
+  chargesPosted       Int       @default(0)
+  noShowsMarked       Int       @default(0)
+  ranAt               DateTime  @default(now())
+  completedAt         DateTime?
+  errorMessage        String?
+
+  @@map("night_audit_runs")
+}
+
+/// *
+///  * ReportExportLog — immutable audit record of each dashboard report export.
+///  * One row per export request (CSV or PDF).
+///  * rowCount = number of DailySnapshot rows included in the exported range.
+///  * Used by Plan 06-03 (export endpoints) for audit trail.
+model ReportExportLog {
+  id          String   @id @default(cuid())
+  userId      String
+  fromDate    DateTime @db.Date
+  toDate      DateTime @db.Date
+  format      String
+  rowCount    Int
+  generatedAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("report_export_log")
+}
+
+model BogotaVenue {
+  id             String           @id @default(cuid())
+  name           String
+  description    String?
+  rating         Decimal?         @db.Decimal(3, 2)
+  address        String?
+  phone          String?
+  website        String?
+  photoUrl       String?
+  mapsUrl        String?
+  isActive       Boolean          @default(true)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  type           VenueType        @default(OTHER)
+  lat            Decimal          @db.Decimal(9, 6)
+  lng            Decimal          @db.Decimal(9, 6)
+  reservationUrl String?
+  events         ConciergeEvent[]
+
+  @@index([type, isActive])
+  @@index([isActive])
+  @@map("bogota_venues")
+}
+
+model ConciergeEvent {
+  id          String      @id @default(cuid())
+  venueId     String
+  title       String
+  startDate   DateTime
+  endDate     DateTime?
+  description String?
+  ticketUrl   String?
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  venue       BogotaVenue @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@index([startDate, isActive])
+  @@map("concierge_events")
+}
+
+model ConciergeTokenUsageDaily {
+  date              DateTime @id @db.Date
+  totalTokensUsed   BigInt   @default(0)
+  totalRequestCount Int      @default(0)
+  lastUpdatedAt     DateTime @updatedAt
+
+  @@map("concierge_token_usage_daily")
+}
+
+model ConciergeMessageLog {
+  id               String   @id @default(cuid())
+  ipHash           String
+  sessionCookie    String?
+  userMessage      String
+  assistantOutput  String?
+  toolCallsJson    Json?
+  finishReason     String?
+  errorMsg         String?
+  promptTokens     Int?
+  completionTokens Int?
+  createdAt        DateTime @default(now())
+
+  @@index([ipHash, createdAt])
+  @@index([createdAt])
+  @@map("concierge_message_logs")
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  RECEPTION
+  HOUSEKEEPING
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  INACTIVE
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  action      String
+  actorId     String
+  targetId    String?
+  targetType  String   @default("USER")
+  details     Json?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+  actor       User     @relation("AuditLogActor", fields: [actorId], references: [id])
+  target      User?    @relation("AuditLogTarget", fields: [targetId], references: [id])
+
+  @@index([actorId])
+  @@index([targetId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+enum PhysicalStatus {
+  AVAILABLE
+  OCCUPIED
+  OUT_OF_SERVICE
+  ON_HOLD
+}
+
+enum CleaningStatus {
+  DIRTY
+  IN_PROGRESS
+  INSPECTION
+  CLEAN
+}
+
+enum ReservationStatus {
+  CONFIRMED
+  CHECKED_IN
+  CHECKED_OUT
+  CANCELLED
+  NO_SHOW
+  PENDING
+}
+
+enum ReservationSource {
+  DIRECT
+  WALK_IN
+  OTA_FUTURE
+}
+
+enum CompletionStatus {
+  PENDING
+  COMPLETED
+  EXPIRED
+}
+
+enum FolioEntryType {
+  ROOM_CHARGE
+  MANUAL_CHARGE
+  VOID
+  ADJUSTMENT
+  TAX
+}
+
+enum HousekeepingPriority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum HousekeepingTaskStatus {
+  OPEN
+  IN_PROGRESS
+  DONE
+}
+
+enum VenueType {
+  RESTAURANT
+  BAR
+  CAFE
+  MUSEUM
+  PARK
+  SHOPPING
+  NIGHTLIFE
+  TRANSPORT_HUB
+  EVENT_VENUE
+  OTHER
+
+  @@map("venue_type")
+}
+
+// ===== CONTACT PREFERENCE ENUM (Phase 15) =====
+
+enum ContactPreference {
+  EMAIL
+  PHONE
+  WHATSAPP
+}
+
+// ===== GUEST CONTACT EVENTS (Phase 16 — GCC-06, GCC-07, GCC-08) =====
+
+enum ContactMethod {
+  CALL
+  WHATSAPP
+  EMAIL
+}
+
+model GuestContactEvent {
+  id          String        @id @default(cuid())
+  guestId     String
+  guest       Guest         @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  staffUserId String
+  staffUser   User          @relation(fields: [staffUserId], references: [id])
+  method      ContactMethod
+  notes       String?       @db.VarChar(500)
+  createdAt   DateTime      @default(now())
+
+  @@index([guestId, createdAt(sort: Desc)])
+  @@index([staffUserId, createdAt(sort: Desc)])
+  @@map("guest_contact_events")
+}
+
+// ===== REVIEWS CONTEXT (Phase 14) =====
+
+model Review {
+  id            String       @id @default(cuid())
+  guestName     String
+  rating        Int          // 1-5 enforced via DB CHECK constraint
+  comment       String       @db.Text
+  stayDate      DateTime     @db.Date
+  reservationId String?
+  reservation   Reservation? @relation(fields: [reservationId], references: [id], onDelete: SetNull)
+  moderated     Boolean      @default(false)
+  publishedAt   DateTime?
+  rejectedAt    DateTime?
+  createdAt     DateTime     @default(now())
+
+  @@index([moderated, publishedAt])
+  @@index([reservationId])
+  @@map("reviews")
+}
+
+// ===== OFFERS (2026-05-28) — Admin-managed promotions on the public homepage =====
+
+/// Offer — a promotion shown on the public homepage. Created/edited/disabled
+/// exclusively by ADMIN role. The "Ofertas" section is hidden on the homepage
+/// when there are no active offers in range.
+///
+/// Lifecycle:
+///   isActive=true  + (validFrom IS NULL OR validFrom <= now)
+///                  + (validTo   IS NULL OR validTo   >= now)
+///                  → visible publicly
+///   any other      → hidden publicly (but kept in admin queue)
+///
+/// `imageKey` points to a Cloudflare R2 object. The public URL is derived at
+/// read time from R2_PUBLIC_URL + key (never stored full URL in DB, per
+/// the established hotel-photos pattern).
+model Offer {
+  id           String   @id @default(cuid())
+  title        String   @db.VarChar(200)
+  description  String?  @db.VarChar(1000)
+  imageKey     String   @db.VarChar(300)
+  badge        String?  @db.VarChar(40)
+  validFrom    DateTime? @db.Date
+  validTo      DateTime? @db.Date
+  ctaText      String?  @db.VarChar(60)
+  ctaLink      String?  @db.VarChar(300)
+  isActive     Boolean  @default(true)
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // 2026-05-28 — Optional association to a single RoomType.
+  // When set, the offer targets that type specifically (booking flow preselects
+  // and locks the selector; public card shows "Aplica a: <name>").
+  // onDelete: SetNull — if the room type is removed, the offer goes back to generic.
+  roomTypeId   String?  @db.VarChar
+  roomType     RoomType? @relation(fields: [roomTypeId], references: [id], onDelete: SetNull)
+
+  reservations Reservation[]
+
+  @@index([isActive, displayOrder])
+  @@index([roomTypeId])
+  @@map("offers")
+}
+
+
+// ===== ROOM TYPE PHOTOS (2026-05-28) — marketing photos shown on public homepage =====
+
+model RoomTypePhoto {
+  id          String   @id @default(cuid())
+  roomTypeId  String
+  key         String   @unique
+  order       Int      @default(0)
+  contentType String?
+  size        Int?
+  createdAt   DateTime @default(now())
+  roomType    RoomType @relation(fields: [roomTypeId], references: [id], onDelete: Cascade)
+
+  @@index([roomTypeId, order])
+  @@map("room_type_photos")
+}
+
+// ===== EMAIL TEMPLATES (Phase 25) — reusable email templates with variable substitution =====
+
+model EmailTemplate {
+  id        String   @id @default(cuid())
+  name      String   @unique  // e.g., "welcome", "pre-arrival", "thank-you", "booking-confirmation"
+  subject   String
+  bodyHtml  String   @db.Text
+  variables String[] @default([])  // ["hotelName", "guestName", "checkInDate", ...]
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("email_templates")
+}

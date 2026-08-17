@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: hotelos_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: 123456
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d hotelos_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api-migrator:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      target: development # Use the development stage to ensure all dependencies are available
+    environment:
+      DATABASE_URL: postgresql://user:123456@db:5432/hotelos_db?schema=public
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["sh", "-c", "pnpm --filter @hotel/api install && npx prisma migrate deploy --schema=apps/api/prisma/schema.prisma"]
+    # This service will run the migrations and then exit
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://user:123456@db:5432/hotelos_db?schema=public
+      # Add other API environment variables here
+    depends_on:
+      db:
+        condition: service_healthy
+      api-migrator:
+        condition: service_completed_successfully # Ensure migrations run before API starts
+    volumes:
+      - ./apps/api:/app/apps/api # Mount for live development (optional, remove for production build)
+      - ./apps/web:/app/apps/web # Mount for live development (optional, remove for production build)
+      - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
+      - ./package.json:/app/package.json
+      - ./tsconfig.base.json:/app/tsconfig.base.json
+      - ./turbo.json:/app/turbo.json
+      - ./node_modules:/app/node_modules # Mount node_modules for development
+    command: ["sh", "-c", "pnpm --filter @hotel/api install && pnpm --filter @hotel/api dev"] # Use dev command for local development
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - "4173:4173"
+    environment:
+      VITE_API_URL: http://localhost:3000 # Adjust if API is exposed differently
+      # Add other WEB environment variables here
+    depends_on:
+      api:
+        condition: service_started
+    volumes:
+      - ./apps/web:/app/apps/web # Mount for live development (optional, remove for production build)
+      - ./apps/api:/app/apps/api # Mount for live development (optional, remove for production build)
+      - ./packages:/app/packages # Mount for live development (optional, remove for production build)
+      - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
+      - ./package.json:/app/package.json
+      - ./tsconfig.base.json:/app/tsconfig.base.json
+      - ./turbo.json:/app/turbo.json
+      - ./node_modules:/app/node_modules # Mount node_modules for development
+    command: ["sh", "-c", "pnpm --filter @hotel/web install && pnpm --filter @hotel/web dev"] # Use dev command for local development
+
+volumes:
+  db_data:

@@ -1,0 +1,119 @@
+name: Performance & Lighthouse CI
+
+# Trigger rationale:
+#   workflow_dispatch — manual runs (measure baseline, verify after a perf-sensitive change)
+#   pull_request with label 'perf-test' — opt-in: expensive, not run on every PR.
+#     Add the label to a PR to get k6 + Lighthouse results as PR comments.
+#
+# Intentionally NOT triggered on push to master/develop — this workflow is
+# informational and slow. Main CI (ci.yml) handles the merge gate.
+#
+# IMPORTANT: This workflow does NOT modify .github/workflows/ci.yml.
+# Phase 18 and Phase 20 own ci.yml. This is a completely independent workflow.
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [labeled]
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Guard: only run on PRs that have the 'perf-test' label applied.
+  # For workflow_dispatch, this guard is skipped (always run).
+  # ---------------------------------------------------------------------------
+  check-label:
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && github.event.label.name == 'perf-test')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm trigger
+        run: |
+          echo "Trigger: ${{ github.event_name }}"
+          echo "Label: ${{ github.event.label.name || 'N/A (manual dispatch)' }}"
+
+  # ---------------------------------------------------------------------------
+  # k6 Load Tests (QSI-20 + QSI-21)
+  # ---------------------------------------------------------------------------
+  k6:
+    name: k6 Load Tests
+    needs: check-label
+    runs-on: ubuntu-latest
+    # Informational only — never blocks merge.
+    # Threshold failures emit a non-zero exit code; continue-on-error absorbs it.
+    continue-on-error: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Verify k6 version
+        run: k6 version
+
+      # k6 requires a running API. For now, the scripts target localhost:3011.
+      # In a real CI pipeline, start the API as a service container or
+      # use BASE_URL pointing to a staging environment.
+      # This step is scaffolded — the API service is NOT started here.
+      # It will produce "connection refused" on localhost:3011 in CI.
+      # To make it functional: add a service container or set BASE_URL to staging.
+
+      - name: Run booking load test (QSI-20)
+        run: |
+          k6 run \
+            -e BASE_URL=${{ vars.PERF_BASE_URL || 'http://localhost:3011' }} \
+            tests/perf/booking-load.k6.js
+        continue-on-error: true
+
+      - name: Run concierge SSE test (QSI-21)
+        run: |
+          k6 run \
+            -e BASE_URL=${{ vars.PERF_BASE_URL || 'http://localhost:3011' }} \
+            tests/perf/concierge-sse.k6.js
+        continue-on-error: true
+
+  # ---------------------------------------------------------------------------
+  # Lighthouse CI (QSI-22)
+  # ---------------------------------------------------------------------------
+  lighthouse:
+    name: Lighthouse CI
+    needs: check-label
+    runs-on: ubuntu-latest
+    # ubuntu-latest has Chrome preinstalled — required by Lighthouse.
+    # Informational only — never blocks merge.
+    continue-on-error: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: latest
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build web (production bundle)
+        run: pnpm --filter @hotel/web build
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: apps/web/lighthouserc.cjs
+          # Uploads reports to Lighthouse CI temporary public storage.
+          # Shareable URLs appear in the Action summary and PR comments.
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        continue-on-error: true

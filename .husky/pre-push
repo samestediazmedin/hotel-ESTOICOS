@@ -1,0 +1,4 @@
+echo "▶ pre-push: typechecking workspaces…"
+pnpm --filter @hotel/shared-kernel typecheck && \
+pnpm --filter @hotel/api typecheck && \
+pnpm --filter @hotel/web typecheck
