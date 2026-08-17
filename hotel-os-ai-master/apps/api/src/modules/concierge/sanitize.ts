@@ -47,7 +47,7 @@ const PUBLIC_INJECTION_PATTERNS: RegExp[] = [
  *        U+FEFF         (byte-order mark / zero-width no-break space),
  *        U+00AD         (soft hyphen).
  */
-const ZERO_WIDTH_RE = /[­​-‏‪- ﻿]/g;
+const ZERO_WIDTH_RE = /[\u200B-\u200F\u202A-\u202F\uFEFF\u00AD]/g;
 
 /**
  * sanitizeConciergeInput — sanitize public user input for the Concierge chatbot.
