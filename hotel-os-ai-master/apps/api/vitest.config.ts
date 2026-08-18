@@ -7,10 +7,19 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     root: './src',
-    // Injects test-only secrets before any module loads (see test-setup.ts).
-    // setupFiles run before test modules are imported, so module-load
-    // fail-fast guards (e.g. CSRF_SECRET) are satisfied without weakening
-    // the production-side validation.
+
     setupFiles: ['./test-setup.ts'],
+
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html', 'lcov'],
+      reportsDirectory: '../coverage',
+      exclude: [
+        '**/*.spec.ts',
+        '**/*.test.ts',
+        '**/node_modules/**',
+        '**/generated/**',
+      ],
+    },
   },
 });
