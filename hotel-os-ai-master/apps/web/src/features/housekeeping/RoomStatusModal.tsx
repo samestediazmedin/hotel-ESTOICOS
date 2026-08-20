@@ -68,12 +68,18 @@ export function RoomStatusModal({ room, onClose }: RoomStatusModalProps) {
   return (
     <div
       className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
-      onClick={onClose}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") onClose();
+      }}
+      role="button"
+      tabIndex={0}
       data-testid="room-status-modal-backdrop"
     >
       <div
         className="bg-white rounded-lg p-6 w-[420px] max-w-full mx-4 shadow-xl"
-        onClick={(e) => e.stopPropagation()}
         data-testid="room-status-modal"
       >
         <h2 className="text-lg font-semibold text-ink-1 mb-1">

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { checkInReservation } from './operations.api';
@@ -172,9 +172,11 @@ export function CheckInDrawer({ reservation, open, onClose }: CheckInDrawerProps
             {CHECKLIST_STEPS.map((step, idx) => (
               <label
                 key={step.key}
+                htmlFor={`checkin-${step.key}`}
                 className="flex items-start gap-3 p-3 rounded-lg border border-warm-line bg-warm-cream cursor-pointer hover:bg-warm-white transition-colors"
               >
                 <input
+                  id={`checkin-${step.key}`}
                   type="checkbox"
                   checked={checks[step.key]}
                   onChange={() => toggleCheck(step.key)}

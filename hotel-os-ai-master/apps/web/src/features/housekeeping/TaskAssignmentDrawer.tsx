@@ -1,4 +1,4 @@
-import { useForm, Controller } from 'react-hook-form';
+﻿import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@/lib/zod-resolver';
 import { z } from 'zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -86,7 +86,14 @@ export function TaskAssignmentDrawer({ room, onClose }: TaskAssignmentDrawerProp
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/20 z-40"
-        onClick={onClose}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") onClose();
+        }}
+        role="button"
+        tabIndex={0}
         data-testid="task-assignment-backdrop"
       />
 
@@ -181,7 +188,7 @@ export function TaskAssignmentDrawer({ room, onClose }: TaskAssignmentDrawerProp
 
           {/* Notes textarea */}
           <div>
-            <label className="block text-sm font-medium text-ink-2 mb-1">
+            <label htmlFor="task-notes" className="block text-sm font-medium text-ink-2 mb-1">
               Notas
             </label>
             <Controller
@@ -189,6 +196,7 @@ export function TaskAssignmentDrawer({ room, onClose }: TaskAssignmentDrawerProp
               control={control}
               render={({ field }) => (
                 <textarea
+                  id="task-notes"
                   {...field}
                   className="w-full border border-warm-line rounded-md p-2 text-sm h-24 resize-none"
                   placeholder="Instrucciones adicionales…"
