@@ -47,8 +47,8 @@ export function RoomStatusModal({ room, onClose }: RoomStatusModalProps) {
   const mutation = useMutation({
     mutationFn: (next: CleaningStatus) =>
       housekeepingApi.transitionRoom(room.id, next),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['housekeeping', 'rooms'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['housekeeping', 'rooms'] });
       onClose();
     },
   });
