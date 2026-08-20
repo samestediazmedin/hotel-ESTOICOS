@@ -1,6 +1,0 @@
-projectKey=Hotel-ESTOICOS
-serverUrl=http://localhost:9000
-serverVersion=26.8.0.126808
-dashboardUrl=http://localhost:9000/dashboard?id=Hotel-ESTOICOS
-ceTaskId=23773513-643a-46b5-9abc-a9e1cb5a02cf
-ceTaskUrl=http://localhost:9000/api/ce/task?id=23773513-643a-46b5-9abc-a9e1cb5a02cf

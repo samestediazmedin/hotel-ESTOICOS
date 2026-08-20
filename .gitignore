@@ -40,3 +40,5 @@ coverage/
 playwright-report/
 test-results/
 blob-report/
+.scannerwork/
+issues.json
