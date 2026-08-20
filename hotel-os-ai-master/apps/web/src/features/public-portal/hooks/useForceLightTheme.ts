@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 
 /**
  * Force light theme while a public-portal surface is mounted.
@@ -8,10 +8,11 @@ import { useEffect } from 'react';
 export function useForceLightTheme() {
   useEffect(() => {
     const root = document.documentElement;
-    const prev = root.getAttribute('data-theme');
-    root.removeAttribute('data-theme');
+    const prev = root.dataset.theme;
+    delete root.dataset.theme;
     return () => {
-      if (prev) root.setAttribute('data-theme', prev);
+      if (prev) root.dataset.theme = prev;
     };
   }, []);
 }
+

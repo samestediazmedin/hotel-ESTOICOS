@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ContactButtons — reusable 3-button contact strip (Phase 16-04, GCC-10)
  *
  * Renders Llamar / WhatsApp / Email buttons for a guest.
@@ -120,8 +120,10 @@ export function ContactButtons({
 
     onSuccess: (_data, variables) => {
       toast.success(TOAST_TEXT[variables]);
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ['guest', guestId, 'contact-events'],
+      }).catch((error) => {
+        console.error('Failed to invalidate contact events:', error);
       });
     },
 
@@ -206,3 +208,4 @@ export function ContactButtons({
     </div>
   );
 }
+

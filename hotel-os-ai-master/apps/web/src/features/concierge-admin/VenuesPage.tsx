@@ -64,7 +64,9 @@ export function VenuesPage() {
 
   const handleSuccess = () => {
     closeDrawer();
-    void refetch();
+    refetch().catch((error) => {
+      console.error('Failed to refetch venues:', error);
+    });
   };
 
   // ─── CSV import ───────────────────────────────────────────────────────────
@@ -79,7 +81,9 @@ export function VenuesPage() {
       setImportStatus(
         `Importado: ${result.inserted} insertados, ${result.skipped} omitidos, ${result.errors} errores`,
       );
-      void refetch();
+      refetch().catch((error) => {
+        console.error('Failed to refetch venues after CSV import:', error);
+      });
     } catch {
       setImportStatus('Error al importar CSV');
     } finally {

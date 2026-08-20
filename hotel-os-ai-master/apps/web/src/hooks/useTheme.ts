@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 
 const STORAGE_KEY = 'hos-theme';
 export type Theme = 'light' | 'dark';
@@ -18,9 +18,9 @@ export function useTheme() {
   useEffect(() => {
     const root = document.documentElement;
     if (theme === 'dark') {
-      root.setAttribute('data-theme', 'dark');
+      root.dataset.theme = 'dark';
     } else {
-      root.removeAttribute('data-theme');
+      delete root.dataset.theme;
     }
     try {
       window.localStorage.setItem(STORAGE_KEY, theme);
@@ -35,3 +35,4 @@ export function useTheme() {
 }
 
 export { STORAGE_KEY };
+

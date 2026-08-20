@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+﻿import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import type { LastContactEventSummary } from './types';
 
@@ -114,7 +114,9 @@ export function useCreateGuest() {
     mutationFn: (data) =>
       api.post<GuestResponseDto>('/guests', data).then((r) => r.data),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: guestKeys.all });
+      queryClient.invalidateQueries({ queryKey: guestKeys.all }).catch((error) => {
+        console.error('Failed to invalidate guest queries:', error);
+      });
     },
   });
 }
@@ -126,8 +128,12 @@ export function useUpdateGuest(id: string) {
     mutationFn: (data) =>
       api.patch<GuestResponseDto>(`/guests/${id}`, data).then((r) => r.data),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: guestKeys.all });
-      void queryClient.invalidateQueries({ queryKey: guestKeys.detail(id) });
+      queryClient.invalidateQueries({ queryKey: guestKeys.all }).catch((error) => {
+        console.error('Failed to invalidate guest queries:', error);
+      });
+      queryClient.invalidateQueries({ queryKey: guestKeys.detail(id) }).catch((error) => {
+        console.error('Failed to invalidate guest detail:', error);
+      });
     },
   });
 }
@@ -141,8 +147,12 @@ export function useAnonymizeGuest(id: string) {
         .post<{ anonymizedAt: string | null }>(`/guests/${id}/anonymize`)
         .then((r) => r.data),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: guestKeys.all });
-      void queryClient.invalidateQueries({ queryKey: guestKeys.detail(id) });
+      queryClient.invalidateQueries({ queryKey: guestKeys.all }).catch((error) => {
+        console.error('Failed to invalidate guest queries:', error);
+      });
+      queryClient.invalidateQueries({ queryKey: guestKeys.detail(id) }).catch((error) => {
+        console.error('Failed to invalidate guest detail:', error);
+      });
     },
   });
 }
@@ -158,13 +168,17 @@ export function useDeleteGuest(id: string) {
       // detail/history de este id — provocaría un refetch que devuelve 404.
       // GuestDetailPage navega a /guests en onSuccess, así que esas queries
       // se desmontan solas.
-      void queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         predicate: (q) =>
           q.queryKey[0] === 'staff' &&
           q.queryKey[1] === 'guests' &&
           typeof q.queryKey[2] === 'object' &&
           q.queryKey[2] !== null,
+      }).catch((error) => {
+        console.error('Failed to invalidate guest list queries:', error);
       });
     },
   });
 }
+
+

@@ -189,10 +189,12 @@ export class OperationsService {
     // DO NOT emit inside the transaction (P3 from RESEARCH §5 — socket fires before DB write commits).
     // DO NOT await — do not block the checkout response (same as void emailService.send() in Phase 03-04).
     // DO use emitAsync (not emit) — async listeners can catch their own errors internally.
-    void this.eventEmitter.emitAsync('reservation.checked_out', {
+    this.eventEmitter.emitAsync('reservation.checked_out', {
       reservationId: result.reservationId,
       roomId: result.roomId,
       at: new Date().toISOString(),
+    }).catch((error) => {
+      console.error('Failed to emit reservation.checked_out event:', error);
     });
 
     return result;

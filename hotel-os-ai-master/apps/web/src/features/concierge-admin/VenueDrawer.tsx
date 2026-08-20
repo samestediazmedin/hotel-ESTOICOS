@@ -149,7 +149,9 @@ export function VenueDrawer({ isOpen, venue, onClose, onSuccess }: VenueDrawerPr
       } else {
         await createVenue(dto);
       }
-      void queryClient.invalidateQueries({ queryKey: ['concierge', 'venues'] });
+      queryClient.invalidateQueries({ queryKey: ['concierge', 'venues'] }).catch((error) => {
+        console.error('Failed to invalidate venues queries:', error);
+      });
       onSuccess();
     } catch (err) {
       console.error('Error saving venue:', err);
@@ -355,7 +357,9 @@ export function VenueDrawer({ isOpen, venue, onClose, onSuccess }: VenueDrawerPr
               <VenuePhotoUploader
                 venueId={venue.id}
                 onUploaded={() => {
-                  void queryClient.invalidateQueries({ queryKey: ['concierge', 'venues'] });
+                  queryClient.invalidateQueries({ queryKey: ['concierge', 'venues'] }).catch((error) => {
+                    console.error('Failed to invalidate venues queries:', error);
+                  });
                 }}
               />
             </div>

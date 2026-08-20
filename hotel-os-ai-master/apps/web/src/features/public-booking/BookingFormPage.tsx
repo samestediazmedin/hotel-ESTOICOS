@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@/lib/zod-resolver';
@@ -315,15 +315,30 @@ export function BookingFormPage() {
                 <label className="text-sm font-medium text-ink-2">Prefiero ser contactado por</label>
                 <div className="flex gap-4 flex-wrap">
                   <label className="flex items-center gap-2 text-sm text-ink-1 cursor-pointer">
-                    <input type="radio" value="EMAIL" {...register('contactPreference')} className="accent-terracotta" />
+                    <input
+                      type="radio"
+                      value="EMAIL"
+                      {...register('contactPreference')}
+                      className="accent-terracotta"
+                    />
                     Correo electrónico
                   </label>
                   <label className="flex items-center gap-2 text-sm text-ink-1 cursor-pointer">
-                    <input type="radio" value="PHONE" {...register('contactPreference')} className="accent-terracotta" />
+                    <input
+                      type="radio"
+                      value="PHONE"
+                      {...register('contactPreference')}
+                      className="accent-terracotta"
+                    />
                     Teléfono
                   </label>
                   <label className="flex items-center gap-2 text-sm text-ink-1 cursor-pointer">
-                    <input type="radio" value="WHATSAPP" {...register('contactPreference')} className="accent-terracotta" />
+                    <input
+                      type="radio"
+                      value="WHATSAPP"
+                      {...register('contactPreference')}
+                      className="accent-terracotta"
+                    />
                     WhatsApp
                   </label>
                 </div>
@@ -334,11 +349,21 @@ export function BookingFormPage() {
                 <label className="text-sm font-medium text-ink-2">Idioma preferido</label>
                 <div className="flex gap-4">
                   <label className="flex items-center gap-2 text-sm text-ink-1 cursor-pointer">
-                    <input type="radio" value="es" {...register('preferredLanguage')} className="accent-terracotta" />
+                    <input
+                      type="radio"
+                      value="es"
+                      {...register('preferredLanguage')}
+                      className="accent-terracotta"
+                    />
                     Español
                   </label>
                   <label className="flex items-center gap-2 text-sm text-ink-1 cursor-pointer">
-                    <input type="radio" value="en" {...register('preferredLanguage')} className="accent-terracotta" />
+                    <input
+                      type="radio"
+                      value="en"
+                      {...register('preferredLanguage')}
+                      className="accent-terracotta"
+                    />
                     English
                   </label>
                 </div>
