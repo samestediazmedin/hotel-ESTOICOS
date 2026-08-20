@@ -1,4 +1,4 @@
-import {
+﻿import {
   Body,
   Controller,
   Get,
@@ -66,7 +66,7 @@ export class GuestContactController {
     @Query('limit') limit?: string,
   ) {
     // Guard against NaN: parseInt('abc', 10) → NaN; NaN || 5 === 5
-    const n = limit !== undefined ? (parseInt(limit, 10) || 5) : 5;
+    const n = limit !== undefined ? (Number.parseInt(limit, 10) || 5) : 5;
     return this.service.listEvents(guestId, n);
   }
 }

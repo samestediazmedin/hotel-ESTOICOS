@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+﻿import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { GuestEncryptionService } from '../guests/encryption/guest-encryption.service';
 import { TRAAuditLogRepository } from './tra-audit-log.repository';
@@ -58,7 +58,7 @@ function fmtDate(d: Date): string {
  *  - Escape any internal double-quote as "" (two double-quotes)
  */
 function escapeCell(value: string): string {
-  return `"${String(value).replace(/"/g, '""')}"`;
+  return `"${String(value).replaceAll('"', '""')}"`;
 }
 
 @Injectable()

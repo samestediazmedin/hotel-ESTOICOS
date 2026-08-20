@@ -1,4 +1,4 @@
-/**
+﻿/**
  * csv-import.service.ts — CSV bulk import for the Bogotá venue catalog.
  *
  * Expected CSV format (comma-separated, UTF-8, no BOM):
@@ -50,8 +50,8 @@ export class CsvImportService {
    */
   async importCsv(content: string): Promise<ImportResult> {
     const lines = content
-      .replace(/\r\n/g, '\n')
-      .replace(/\r/g, '\n')
+      .replaceAll('\r\n', '\n')
+      .replaceAll('\r', '\n')
       .split('\n')
       .filter((l) => l.trim().length > 0);
 
