@@ -17,7 +17,7 @@ function parseDbUrl(url: string) {
   const u = new URL(url);
   return {
     host: u.hostname,
-    port: u.port ? parseInt(u.port, 10) : 5432,
+    port: u.port ? Number.parseInt(u.port, 10) : 5432,
     database: u.pathname.replace(/^\//, ''),
     user: decodeURIComponent(u.username),
     password: decodeURIComponent(u.password),

@@ -19,7 +19,7 @@ export const RateOptionsQuerySchema = z.object({
     .optional()
     .default('1')
     .transform((v) => {
-      const n = parseInt(v, 10);
+      const n = Number.parseInt(v, 10);
       return Number.isNaN(n) ? 1 : n;
     })
     .pipe(z.number().int().min(1).max(20)),

@@ -50,8 +50,8 @@ export class CsvImportService {
    */
   async importCsv(content: string): Promise<ImportResult> {
     const lines = content
-      .replace(/\r\n/g, '\n')
-      .replace(/\r/g, '\n')
+      .replaceAll(/\r\n/g, '\n')
+      .replaceAll(/\r/g, '\n')
       .split('\n')
       .filter((l) => l.trim().length > 0);
 
