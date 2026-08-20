@@ -166,14 +166,14 @@ export function RatePlansPage() {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <div className="flex items-center justify-end gap-2">
-                      <button
+                      <button type="button"
                         onClick={() => openEdit(plan)}
                         className="text-xs text-brand-primary hover:underline"
                       >
                         Editar
                       </button>
                       {plan.isActive && (
-                        <button
+                        <button type="button"
                           onClick={() => deactivateMutation.mutate(plan.id)}
                           disabled={deactivateMutation.isPending}
                           className="text-xs text-status-in-progress hover:underline disabled:opacity-50"

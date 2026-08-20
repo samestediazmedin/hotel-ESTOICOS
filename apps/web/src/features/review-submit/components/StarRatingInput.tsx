@@ -56,7 +56,7 @@ export function StarRatingInput({ value, onChange, disabled }: StarRatingInputPr
         const isTabTarget = value === idx || (value === 0 && idx === 1);
 
         return (
-          <button
+          <button type="button"
             key={idx}
             type="button"
             role="radio"

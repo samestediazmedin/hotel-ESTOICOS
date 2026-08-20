@@ -112,7 +112,7 @@ export function ConciergeDrawer({ open, onClose }: ConciergeDrawerProps) {
             Concierge IA
           </h2>
 
-          <button
+          <button type="button"
             ref={closeButtonRef}
             type="button"
             onClick={onClose}

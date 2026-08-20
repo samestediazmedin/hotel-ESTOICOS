@@ -63,7 +63,7 @@ export function TopNav({ hotelName, onNavClick, onConciergeClick, showOffers = f
           {navItems.map(({ label, id }) => {
             if (label === 'Concierge') {
               return (
-                <button
+                <button type="button"
                   key={id}
                   type="button"
                   onClick={onConciergeClick}
@@ -74,7 +74,7 @@ export function TopNav({ hotelName, onNavClick, onConciergeClick, showOffers = f
               );
             }
             return (
-              <button
+              <button type="button"
                 key={id}
                 type="button"
                 onClick={() => onNavClick(id)}
@@ -88,8 +88,7 @@ export function TopNav({ hotelName, onNavClick, onConciergeClick, showOffers = f
 
         {/* Right action buttons */}
         <div className="flex items-center gap-2 ml-auto">
-          <button
-            type="button"
+          <button type="button"
             aria-label="Guardar"
             className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-warm-paper transition-colors"
           >

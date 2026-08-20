@@ -71,8 +71,7 @@ export function HotelSettingsPage() {
             No se pudo cargar la configuración.{' '}
             {error?.message ?? 'Intenta de nuevo.'}
           </span>
-          <button
-            type="button"
+          <button type="button"
             onClick={() => refetch()}
             className="underline hover:no-underline ml-4 shrink-0"
           >

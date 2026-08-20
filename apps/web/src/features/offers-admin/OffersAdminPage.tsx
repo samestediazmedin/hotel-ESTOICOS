@@ -64,8 +64,7 @@ export function OffersAdminPage() {
             están activas y dentro de su rango de fechas.
           </p>
         </div>
-        <button
-          type="button"
+        <button type="button"
           onClick={openCreate}
           className="inline-flex items-center gap-2 rounded-md bg-terracotta text-warm-white text-sm font-medium px-4 py-2 hover:bg-terracotta-deep transition-colors"
         >
@@ -89,8 +88,7 @@ export function OffersAdminPage() {
           className="rounded-md border border-terracotta/30 bg-terracotta/10 text-terracotta px-4 py-3 text-sm flex items-center justify-between"
         >
           <span>No se pudieron cargar las ofertas.</span>
-          <button
-            type="button"
+          <button type="button"
             onClick={() => refetch()}
             className="underline hover:no-underline ml-4 shrink-0"
           >
@@ -105,8 +103,7 @@ export function OffersAdminPage() {
           <p className="text-sm text-ink-3 mb-4">
             Crea la primera promoción para que aparezca en el homepage del hotel.
           </p>
-          <button
-            type="button"
+          <button type="button"
             onClick={openCreate}
             className="inline-flex items-center gap-2 rounded-md bg-terracotta text-warm-white text-sm font-medium px-4 py-2 hover:bg-terracotta-deep transition-colors"
           >
@@ -176,16 +173,14 @@ export function OffersAdminPage() {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1">
-                      <button
-                        type="button"
+                      <button type="button"
                         onClick={() => openEdit(offer)}
                         title="Editar"
                         className="p-2 rounded-md hover:bg-warm-cream text-ink-2 hover:text-ink-1 transition-colors"
                       >
                         <Pencil className="w-4 h-4" />
                       </button>
-                      <button
-                        type="button"
+                      <button type="button"
                         onClick={() => onDelete(offer)}
                         disabled={isDeleting}
                         title="Eliminar"

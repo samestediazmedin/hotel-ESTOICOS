@@ -137,7 +137,7 @@ function RateRow({ option, nights, onSelect }: RateRowProps) {
             Mínimo {violation!.required} noches
           </span>
         ) : (
-          <button
+          <button type="button"
             onClick={onSelect}
             className="shrink-0 bg-[#c45a3a] text-white text-sm px-4 py-1.5 rounded-lg font-medium hover:bg-[#a84830] transition-colors"
             aria-label={`Reservar ${option.ratePlanName}`}
@@ -192,7 +192,7 @@ function RateOptionsPanel({
 
   return (
     <div className="mt-3 border-t border-gray-100 pt-3">
-      <button
+      <button type="button"
         onClick={() => setExpanded((v) => !v)}
         className="flex items-center gap-1.5 text-sm font-medium text-[#c45a3a] hover:text-[#a84830] transition-colors"
         aria-expanded={expanded}

@@ -84,8 +84,7 @@ export function HotelHomePage() {
             <span className="flex-1">
               No pudimos cargar toda la información. Mostrando datos por defecto.
             </span>
-            <button
-              type="button"
+            <button type="button"
               onClick={retryAll}
               className="underline font-medium hover:text-terracotta shrink-0"
             >

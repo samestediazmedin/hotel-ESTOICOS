@@ -178,7 +178,7 @@ export function ReportExportPage() {
           </div>
 
           {/* Action buttons */}
-          <button
+          <button type="button"
             onClick={handleGenerate}
             disabled={isFetching}
             className="flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-md text-sm font-medium hover:bg-brand/90 disabled:opacity-50 transition-colors"
@@ -191,7 +191,7 @@ export function ReportExportPage() {
             Generar resumen
           </button>
 
-          <button
+          <button type="button"
             onClick={handleDownloadCsv}
             disabled={csvLoading}
             className="flex items-center gap-2 px-4 py-2 border border-warm-line rounded-md text-sm font-medium text-ink-2 hover:bg-warm-white-hover disabled:opacity-50 transition-colors"
@@ -204,7 +204,7 @@ export function ReportExportPage() {
             Descargar CSV
           </button>
 
-          <button
+          <button type="button"
             onClick={handleDownloadPdf}
             disabled={pdfLoading}
             className="flex items-center gap-2 px-4 py-2 border border-warm-line rounded-md text-sm font-medium text-ink-2 hover:bg-warm-white-hover disabled:opacity-50 transition-colors"

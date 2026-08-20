@@ -79,8 +79,7 @@ export function PhotoThumbnail({
       {/* Delete with confirmation — top-right */}
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <button
-            type="button"
+          <button type="button"
             disabled={deleting}
             aria-label={`Eliminar foto ${index + 1}`}
             className="absolute top-1.5 right-1.5 bg-warm-white/85 hover:bg-terracotta hover:text-warm-white text-ink-2 rounded p-0.5 transition-colors disabled:opacity-50"

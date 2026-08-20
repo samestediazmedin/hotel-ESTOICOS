@@ -63,8 +63,7 @@ function OfferCard({ offer, onOpenDrawer }: OfferCardProps) {
   const validity = formatValidity(offer.validFrom, offer.validTo);
 
   return (
-    <button
-      type="button"
+    <button type="button"
       onClick={onOpenDrawer}
       aria-label={`Ver detalle de ${offer.title}`}
       className="group flex flex-col rounded-2xl overflow-hidden border border-warm-line bg-warm-white shadow-sm hover:shadow-md transition-shadow cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"

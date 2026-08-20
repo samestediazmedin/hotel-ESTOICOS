@@ -57,8 +57,7 @@ export function OfferDetailDrawer({ offer, onClose }: OfferDetailDrawerProps) {
   return (
     <>
       {/* Backdrop */}
-      <button
-        type="button"
+      <button type="button"
         aria-label="Cerrar"
         className="fixed inset-0 z-40 bg-ink-1/60 backdrop-blur-sm"
         onClick={onClose}
@@ -100,8 +99,7 @@ export function OfferDetailDrawer({ offer, onClose }: OfferDetailDrawerProps) {
                 {offer.title}
               </h2>
             </div>
-            <button
-              type="button"
+            <button type="button"
               aria-label="Cerrar"
               onClick={onClose}
               className="text-ink-3 hover:text-ink-1 shrink-0 ml-3 mt-1"

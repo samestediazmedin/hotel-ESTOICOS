@@ -31,8 +31,7 @@ export function HeroGallery({ photos }: HeroGalleryProps) {
         }}
       >
         {/* Large left image — spans 2 rows */}
-        <button
-          type="button"
+        <button type="button"
           aria-label={photos[0].alt || 'Ver foto 1'}
           onClick={() => setOpenIndex(0)}
           className="row-span-2 block w-full h-full overflow-hidden cursor-pointer"
@@ -46,8 +45,7 @@ export function HeroGallery({ photos }: HeroGalleryProps) {
 
         {/* Top-middle */}
         {photos[1] && (
-          <button
-            type="button"
+          <button type="button"
             aria-label={photos[1].alt || 'Ver foto 2'}
             onClick={() => setOpenIndex(1)}
             className="block w-full h-full overflow-hidden cursor-pointer"
@@ -62,8 +60,7 @@ export function HeroGallery({ photos }: HeroGalleryProps) {
 
         {/* Top-right */}
         {photos[2] && (
-          <button
-            type="button"
+          <button type="button"
             aria-label={photos[2].alt || 'Ver foto 3'}
             onClick={() => setOpenIndex(2)}
             className="block w-full h-full overflow-hidden cursor-pointer"
@@ -78,8 +75,7 @@ export function HeroGallery({ photos }: HeroGalleryProps) {
 
         {/* Bottom-middle */}
         {photos[3] && (
-          <button
-            type="button"
+          <button type="button"
             aria-label={photos[3].alt || 'Ver foto 4'}
             onClick={() => setOpenIndex(3)}
             className="block w-full h-full overflow-hidden cursor-pointer"
@@ -95,8 +91,7 @@ export function HeroGallery({ photos }: HeroGalleryProps) {
         {/* Bottom-right: overlay with "Ver las N fotos" — only when at least 4 photos exist */}
         {(photos[4] ?? photos[3]) && (
           <div className="relative w-full h-full overflow-hidden">
-            <button
-              type="button"
+            <button type="button"
               aria-label={(photos[4] ?? photos[3]).alt || `Ver foto ${Math.min(5, photos.length)}`}
               onClick={() => setOpenIndex(4 < photos.length ? 4 : photos.length - 1)}
               className="block w-full h-full overflow-hidden cursor-pointer"
@@ -107,8 +102,7 @@ export function HeroGallery({ photos }: HeroGalleryProps) {
                 className="w-full h-full object-cover hover:opacity-90 transition-opacity"
               />
             </button>
-            <button
-              type="button"
+            <button type="button"
               onClick={() => setOpenIndex(0)}
               className="absolute bottom-3 right-3 bg-warm-white text-ink-1 text-xs font-medium px-3 py-1.5 rounded-lg border border-warm-line pointer-events-auto"
             >
@@ -127,8 +121,7 @@ export function HeroGallery({ photos }: HeroGalleryProps) {
         }}
       >
         {/* Large left image — spans 2 rows */}
-        <button
-          type="button"
+        <button type="button"
           aria-label={photos[0].alt || 'Ver foto 1'}
           onClick={() => setOpenIndex(0)}
           className="row-span-2 block w-full h-full overflow-hidden cursor-pointer"
@@ -142,8 +135,7 @@ export function HeroGallery({ photos }: HeroGalleryProps) {
 
         {/* Top-right */}
         {photos[1] && (
-          <button
-            type="button"
+          <button type="button"
             aria-label={photos[1].alt || 'Ver foto 2'}
             onClick={() => setOpenIndex(1)}
             className="block w-full h-full overflow-hidden cursor-pointer"
@@ -159,8 +151,7 @@ export function HeroGallery({ photos }: HeroGalleryProps) {
         {/* Bottom-right: overlay — only when at least 2 photos exist */}
         {(photos[2] ?? photos[1]) && (
           <div className="relative w-full h-full overflow-hidden">
-            <button
-              type="button"
+            <button type="button"
               aria-label={(photos[2] ?? photos[1]).alt || `Ver foto ${Math.min(3, photos.length)}`}
               onClick={() => setOpenIndex(2 < photos.length ? 2 : photos.length - 1)}
               className="block w-full h-full overflow-hidden cursor-pointer"
@@ -171,8 +162,7 @@ export function HeroGallery({ photos }: HeroGalleryProps) {
                 className="w-full h-full object-cover hover:opacity-90 transition-opacity"
               />
             </button>
-            <button
-              type="button"
+            <button type="button"
               onClick={() => setOpenIndex(0)}
               className="absolute bottom-2 right-2 bg-warm-white text-ink-1 text-xs font-medium px-2 py-1 rounded-lg border border-warm-line pointer-events-auto"
             >

@@ -158,7 +158,7 @@ export function HousekeepingPage() {
               {/* Card list area */}
               <div className="flex flex-col gap-2 p-2 bg-warm-paper border border-t-0 border-warm-line rounded-b-xl min-h-[200px]">
                 {rooms.map((room) => (
-                  <button
+                  <button type="button"
                     key={room.id}
                     type="button"
                     onClick={() => setSelectedRoom(room)}

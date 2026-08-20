@@ -159,7 +159,7 @@ export function RoomTypesPage() {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <div className="flex items-center justify-end gap-3">
-                      <button
+                      <button type="button"
                         onClick={() => setPhotosTarget(type)}
                         className="inline-flex items-center gap-1 text-xs text-terracotta hover:underline"
                         title="Gestionar fotos del tipo"
@@ -167,7 +167,7 @@ export function RoomTypesPage() {
                         <ImageIcon className="w-3.5 h-3.5" />
                         Fotos
                       </button>
-                      <button
+                      <button type="button"
                         onClick={() =>
                           navigate(`/pricing/seasons?roomTypeId=${type.id}`)
                         }
@@ -178,14 +178,14 @@ export function RoomTypesPage() {
                         <CalendarRange className="w-3.5 h-3.5" />
                         Temporadas
                       </button>
-                      <button
+                      <button type="button"
                         onClick={() => openEdit(type)}
                         className="text-xs text-terracotta hover:underline"
                       >
                         Editar
                       </button>
                       {type.isActive ? (
-                        <button
+                        <button type="button"
                           onClick={() => deactivateMutation.mutate(type.id)}
                           disabled={deactivateMutation.isPending}
                           className="text-xs text-terracotta hover:text-terracotta-deep hover:underline disabled:opacity-50"
@@ -193,7 +193,7 @@ export function RoomTypesPage() {
                           Desactivar
                         </button>
                       ) : (
-                        <button
+                        <button type="button"
                           onClick={() => activateMutation.mutate(type.id)}
                           disabled={activateMutation.isPending}
                           className="text-xs text-ink-3 hover:underline disabled:opacity-50"

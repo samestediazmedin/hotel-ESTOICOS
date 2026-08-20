@@ -99,8 +99,7 @@ export function SeasonsPage() {
             <ul className="divide-y divide-warm-line">
               {roomTypes.map((rt) => (
                 <li key={rt.id}>
-                  <button
-                    type="button"
+                  <button type="button"
                     className="w-full flex items-center justify-between px-6 py-4 hover:bg-warm-cream/60 transition-colors text-left"
                     onClick={() =>
                       navigate(`/pricing/seasons?roomTypeId=${rt.id}`)
@@ -142,8 +141,7 @@ export function SeasonsPage() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <button
-            type="button"
+          <button type="button"
             onClick={() => navigate('/pricing/seasons')}
             className="text-sm text-ink-3 hover:text-ink-1 underline"
           >
@@ -218,13 +216,13 @@ export function SeasonsPage() {
                       onClick={(e) => e.stopPropagation()}
                     >
                       <div className="flex items-center justify-end gap-2">
-                        <button
+                        <button type="button"
                           onClick={() => openEdit(season)}
                           className="text-xs text-brand-primary hover:underline"
                         >
                           Editar
                         </button>
-                        <button
+                        <button type="button"
                           onClick={() => {
                             if (
                               window.confirm(

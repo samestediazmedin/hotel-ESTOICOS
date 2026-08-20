@@ -142,8 +142,7 @@ export function RoomTypePhotosManager({
   return (
     <>
       {/* Backdrop */}
-      <button
-        type="button"
+      <button type="button"
         aria-label="Cerrar"
         className="fixed inset-0 z-40 bg-ink-1/30 backdrop-blur-sm"
         onClick={onClose}
@@ -155,8 +154,7 @@ export function RoomTypePhotosManager({
             <h2 className="font-display text-xl text-ink-1">Fotos</h2>
             <p className="text-xs text-ink-3">{roomTypeName}</p>
           </div>
-          <button
-            type="button"
+          <button type="button"
             aria-label="Cerrar"
             onClick={onClose}
             className="text-ink-3 hover:text-ink-1"
@@ -182,7 +180,7 @@ export function RoomTypePhotosManager({
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
-                  <button
+                  <button type="button"
                     onClick={() => handleDelete(p.id)}
                     disabled={deleteMutation.isPending}
                     className="absolute inset-0 flex items-center justify-center bg-ink-1/40 opacity-0 group-hover:opacity-100 transition-opacity"

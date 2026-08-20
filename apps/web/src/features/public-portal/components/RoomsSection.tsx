@@ -37,7 +37,7 @@ export function RoomsSection({ rooms, ivaContext }: RoomsSectionProps) {
           const { amount: displayAmount, ivaIncluded } = formatRoomPrice(room.basePrice, ivaContext);
 
           return (
-            <button
+            <button type="button"
               key={room.id}
               type="button"
               onClick={() => setSelected(room)}

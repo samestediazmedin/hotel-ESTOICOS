@@ -99,8 +99,7 @@ interface TabButtonProps {
 
 function TabButton({ active, onClick, children }: TabButtonProps) {
   return (
-    <button
-      type="button"
+    <button type="button"
       onClick={onClick}
       className={
         active

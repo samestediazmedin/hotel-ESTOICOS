@@ -134,7 +134,7 @@ export function RoomsPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {rooms.map((room) => (
-            <button
+            <button type="button"
               key={room.id}
               type="button"
               onClick={() => openDetail(room)}
@@ -178,8 +178,7 @@ export function RoomsPage() {
                 {/* Deactivate action — stops propagation so card click still opens drawer */}
                 {room.isActive && (
                   <div className="mt-1 flex justify-end">
-                    <button
-                      type="button"
+                    <button type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         deactivateMutation.mutate(room.id);

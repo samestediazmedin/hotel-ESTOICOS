@@ -104,7 +104,7 @@ export function RoomStatusModal({ room, onClose }: RoomStatusModalProps) {
         {!isReadOnly && hasAssignedTask && (
           <div className="space-y-2">
             {validNext.map((next) => (
-              <button
+              <button type="button"
                 key={next}
                 onClick={() => mutation.mutate(next)}
                 disabled={mutation.isPending}
@@ -125,7 +125,7 @@ export function RoomStatusModal({ room, onClose }: RoomStatusModalProps) {
         )}
 
         <div className="mt-4 pt-3 border-t border-warm-line">
-          <button
+          <button type="button"
             onClick={onClose}
             className="text-sm text-ink-3 underline hover:no-underline"
           >

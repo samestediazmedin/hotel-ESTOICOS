@@ -112,8 +112,7 @@ export function Sidebar() {
       </div>
 
       {/* ── Collapse toggle ─────────────────────────────────────────────────── */}
-      <button
-        type="button"
+      <button type="button"
         onClick={toggle}
         aria-label={collapsed ? 'Expandir barra lateral' : 'Plegar barra lateral'}
         className="w-full flex items-center justify-end px-2 py-1 text-ink-3 hover:text-ink-1 transition-colors"
@@ -171,8 +170,7 @@ export function Sidebar() {
 
       {/* ── AI Assistant button ─────────────────────────────────────────────── */}
       <div className="px-2 border-t border-warm-line pt-2">
-        <button
-          type="button"
+        <button type="button"
           onClick={() => useAiChatStore.getState().open()}
           title={collapsed ? 'Asistente IA' : undefined}
           className="flex items-center gap-3 w-full px-3 py-2 rounded-md text-sm text-ink-2 hover:bg-warm-cream hover:text-ink-1 transition-colors"
@@ -191,8 +189,7 @@ export function Sidebar() {
         </div>
 
         {/* Logout */}
-        <button
-          type="button"
+        <button type="button"
           onClick={logout}
           title={collapsed ? 'Cerrar sesión' : undefined}
           className="flex items-center gap-3 w-full px-3 py-2 rounded-md text-sm text-ink-3 hover:text-ink-1 hover:bg-warm-cream transition-colors"
