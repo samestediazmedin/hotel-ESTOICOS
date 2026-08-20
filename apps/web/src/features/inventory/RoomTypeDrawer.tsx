@@ -133,7 +133,7 @@ export function RoomTypeDrawer({
           <h2 className="text-ink-1 text-lg font-semibold">
             {isEdit ? 'Editar tipo de habitación' : 'Nuevo tipo de habitación'}
           </h2>
-          <button
+          <button type="button"
             onClick={onClose}
             className="text-ink-3 hover:text-ink-1 transition-colors"
             aria-label="Cerrar"

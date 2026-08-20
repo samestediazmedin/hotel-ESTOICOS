@@ -215,7 +215,7 @@ export function RoomDrawer({ isOpen, room, onClose, onSuccess }: RoomDrawerProps
           <h2 className="text-ink-1 text-lg font-semibold">
             {isEdit ? `Habitación ${room.number}` : 'Nueva habitación'}
           </h2>
-          <button
+          <button type="button"
             onClick={onClose}
             className="absolute top-4 right-4 w-8 h-8 rounded-md hover:bg-warm-paper flex items-center justify-center text-ink-2 hover:text-ink-1 transition-colors"
             aria-label="Cerrar"
@@ -227,7 +227,7 @@ export function RoomDrawer({ isOpen, room, onClose, onSuccess }: RoomDrawerProps
         {/* Tab navigation */}
         <div className="border-b border-warm-line flex gap-1 px-4 overflow-x-auto">
           {TABS.map((tab) => (
-            <button
+            <button type="button"
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex-shrink-0 px-4 py-3 text-sm border-b-2 transition-colors ${
