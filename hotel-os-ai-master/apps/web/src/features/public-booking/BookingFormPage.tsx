@@ -74,8 +74,8 @@ export function BookingFormPage() {
   const roomTypeIdParam = searchParams.get('roomTypeId') ?? '';
   const checkIn = searchParams.get('checkIn') ?? '';
   const checkOut = searchParams.get('checkOut') ?? '';
-  const adults = parseInt(searchParams.get('adults') ?? '2', 10);
-  const total = parseFloat(searchParams.get('total') ?? '0');
+  const adults = Number.parseInt(searchParams.get('adults') ?? '2', 10);
+  const total = Number.parseFloat(searchParams.get('total') ?? '0');
   const sourceOfferId = searchParams.get('offer');
   // 2026-05-29 Phase 2 — engine-driven rate plan chosen in BookingResultsPage.
   // ratePlanId: null or absent → server uses BAR (backward-compat).
@@ -413,3 +413,6 @@ export function BookingFormPage() {
     </div>
   );
 }
+
+
+

@@ -18,8 +18,8 @@ const copFormatter = new Intl.NumberFormat('es-CO', {
 });
 
 function formatCOP(value: number | string | undefined | null): string {
-  const n = typeof value === 'string' ? parseFloat(value) : (value ?? 0);
-  return isNaN(n) ? '—' : copFormatter.format(n);
+  const n = typeof value === 'string' ? Number.parseFloat(value) : (value ?? 0);
+  return Number.isNaN(n) ? '—' : copFormatter.format(n);
 }
 
 // ─── Props ────────────────────────────────────────────────────────────────────
@@ -300,3 +300,5 @@ export function RichToolResult({ toolName, result, error }: RichToolResultProps)
     }
   }
 }
+
+

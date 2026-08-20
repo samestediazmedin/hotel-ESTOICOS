@@ -89,10 +89,10 @@ const LANGUAGE_LABEL: Record<string, string> = {
 function ageFromDateOfBirth(iso: string): string {
   try {
     const dob = new Date(iso);
-    if (isNaN(dob.getTime())) return '—';
+    if (Number.isNaN(dob.getTime())) return '—';
     const diff = Date.now() - dob.getTime();
     const age = Math.floor(diff / 31557600000);
-    if (isNaN(age) || age < 0) return '—';
+    if (Number.isNaN(age) || age < 0) return '—';
     return `${age}`;
   } catch {
     return '—';
@@ -208,7 +208,7 @@ function InfoRow({ label, value }: { label: string; value: string }) {
 function formatDisplayDate(iso: string): string {
   try {
     const d = new Date(iso + 'T00:00:00.000Z');
-    if (isNaN(d.getTime())) return '—';
+    if (Number.isNaN(d.getTime())) return '—';
     return d.toLocaleDateString('es-CO', {
       day: 'numeric',
       month: 'short',
@@ -801,3 +801,4 @@ export function GuestDetailPage() {
     </div>
   );
 }
+

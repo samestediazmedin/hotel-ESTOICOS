@@ -43,8 +43,10 @@ function findApplicableSeason(
   });
   if (applicable.length === 0) return null;
   // Multiple overlapping seasons: take highest multiplier
-  return applicable.reduce((max, s) =>
-    Number(s.multiplier) > Number(max.multiplier) ? s : max,
+  return applicable.reduce(
+    (max, s) =>
+      Number(s.multiplier) > Number(max.multiplier) ? s : max,
+    applicable[0],
   );
 }
 
@@ -72,8 +74,11 @@ function findDominantSeason(
     }
   }
   if (counts.size === 0) return null;
-  return [...counts.values()].reduce((max, c) =>
-    c.count > max.count ? c : max,
+  const countValues = [...counts.values()];
+
+  return countValues.reduce(
+    (max, c) => (c.count > max.count ? c : max),
+    countValues[0],
   ).season;
 }
 

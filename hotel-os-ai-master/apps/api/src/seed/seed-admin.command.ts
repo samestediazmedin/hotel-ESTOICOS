@@ -80,8 +80,8 @@ export class SeedAdminCommand extends CommandRunner {
         `system_config already exists: timezone=${existingConfig.hotelTimezone}, businessDate=${existingConfig.hotelBusinessDate.toISOString().slice(0, 10)}`,
       );
     } else {
-      const ivaRate = parseFloat(ivaRaw!);
-      if (isNaN(ivaRate)) {
+      const ivaRate = Number.parseFloat(ivaRaw!);
+      if (Number.isNaN(ivaRate)) {
         throw new Error(`IVA_RATE is not a valid number: "${ivaRaw}"`);
       }
 
@@ -99,3 +99,5 @@ export class SeedAdminCommand extends CommandRunner {
     }
   }
 }
+
+
