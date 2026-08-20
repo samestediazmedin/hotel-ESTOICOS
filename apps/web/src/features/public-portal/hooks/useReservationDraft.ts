@@ -22,7 +22,7 @@ export function useReservationDraft() {
     () => ({
       checkIn: params.get('checkIn'),
       checkOut: params.get('checkOut'),
-      adults: parseInt(params.get('adults') ?? '2', 10),
+      adults: Number.parseInt(params.get('adults') ?? '2', 10),
       offer: params.get('offer'),
     }),
     [params],

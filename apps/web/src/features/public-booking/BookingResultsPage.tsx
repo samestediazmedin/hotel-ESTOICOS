@@ -341,7 +341,7 @@ export function BookingResultsPage() {
 
   const checkIn = searchParams.get('checkIn') ?? '';
   const checkOut = searchParams.get('checkOut') ?? '';
-  const adults = parseInt(searchParams.get('adults') ?? '2', 10);
+  const adults = Number.parseInt(searchParams.get('adults') ?? '2', 10);
   const offer = searchParams.get('offer');
   const nights = checkIn && checkOut
     ? Math.round(

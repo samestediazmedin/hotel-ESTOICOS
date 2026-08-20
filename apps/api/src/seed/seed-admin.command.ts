@@ -81,7 +81,7 @@ export class SeedAdminCommand extends CommandRunner {
       );
     } else {
       const ivaRate = Number.parseFloat(ivaRaw!);
-      if (isNaN(ivaRate)) {
+      if (Number.isNaN(ivaRate)) {
         throw new Error(`IVA_RATE is not a valid number: "${ivaRaw}"`);
       }
 

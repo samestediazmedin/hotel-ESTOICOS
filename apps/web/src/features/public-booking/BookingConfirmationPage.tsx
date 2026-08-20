@@ -23,7 +23,7 @@ export function BookingConfirmationPage() {
 
   const reservationId = searchParams.get('reservationId') ?? '';
   const guestName = decodeURIComponent(searchParams.get('guestName') ?? '');
-  const total = parseFloat(searchParams.get('total') ?? '0');
+  const total = Number.parseFloat(searchParams.get('total') ?? '0');
 
   if (!reservationId) {
     return (
