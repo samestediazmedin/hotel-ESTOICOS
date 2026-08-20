@@ -61,8 +61,7 @@ export function RoomTypeDetailDrawer({ room, ivaContext, onClose }: RoomTypeDeta
   return (
     <>
       {/* Backdrop */}
-      <button
-        type="button"
+      <button type="button"
         aria-label="Cerrar"
         className="fixed inset-0 z-40 bg-ink-1/60 backdrop-blur-sm"
         onClick={onClose}
@@ -88,16 +87,14 @@ export function RoomTypeDetailDrawer({ room, ivaContext, onClose }: RoomTypeDeta
                 />
                 {room.photos.length > 1 && (
                   <>
-                    <button
-                      type="button"
+                    <button type="button"
                       onClick={prev}
                       aria-label="Foto anterior"
                       className="absolute left-3 lg:left-5 top-1/2 -translate-y-1/2 bg-warm-white/90 hover:bg-warm-white rounded-full p-2.5 shadow-md transition-colors"
                     >
                       <ChevronLeft className="w-5 h-5 text-ink-1" />
                     </button>
-                    <button
-                      type="button"
+                    <button type="button"
                       onClick={next}
                       aria-label="Foto siguiente"
                       className="absolute right-3 lg:right-5 top-1/2 -translate-y-1/2 bg-warm-white/90 hover:bg-warm-white rounded-full p-2.5 shadow-md transition-colors"
@@ -121,9 +118,8 @@ export function RoomTypeDetailDrawer({ room, ivaContext, onClose }: RoomTypeDeta
           {room.photos.length > 1 && (
             <div className="flex gap-2 overflow-x-auto px-4 py-3 bg-ink-1/95 shrink-0">
               {room.photos.map((p, i) => (
-                <button
+                <button type="button"
                   key={p.url}
-                  type="button"
                   onClick={() => setActiveIdx(i)}
                   className={
                     'shrink-0 w-20 h-20 rounded-md overflow-hidden border-2 transition-opacity ' +
@@ -163,8 +159,7 @@ export function RoomTypeDetailDrawer({ room, ivaContext, onClose }: RoomTypeDeta
                 {room.name}
               </h2>
             </div>
-            <button
-              type="button"
+            <button type="button"
               aria-label="Cerrar"
               onClick={onClose}
               className="text-ink-3 hover:text-ink-1 shrink-0 ml-3 mt-1"
@@ -225,8 +220,7 @@ export function RoomTypeDetailDrawer({ room, ivaContext, onClose }: RoomTypeDeta
 
           {/* Sticky footer CTA */}
           <footer className="px-5 lg:px-7 py-4 border-t border-warm-line shrink-0 bg-warm-white">
-            <button
-              type="button"
+            <button type="button"
               onClick={() => {
                 onClose();
                 requestDatePicker();

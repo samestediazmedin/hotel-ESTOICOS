@@ -56,9 +56,8 @@ export function StarRatingInput({ value, onChange, disabled }: StarRatingInputPr
         const isTabTarget = value === idx || (value === 0 && idx === 1);
 
         return (
-          <button
+          <button type="button"
             key={idx}
-            type="button"
             role="radio"
             aria-checked={value === idx}
             aria-label={`Dar ${idx} ${idx === 1 ? 'estrella' : 'estrellas'}`}

@@ -112,9 +112,8 @@ export function ConciergeDrawer({ open, onClose }: ConciergeDrawerProps) {
             Concierge IA
           </h2>
 
-          <button
+          <button type="button"
             ref={closeButtonRef}
-            type="button"
             onClick={onClose}
             aria-label="Cerrar concierge"
             className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-warm-paper transition-colors text-ink-3 hover:text-ink-1"

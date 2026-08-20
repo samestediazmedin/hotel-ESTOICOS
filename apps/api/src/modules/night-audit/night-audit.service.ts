@@ -132,7 +132,7 @@ export class NightAuditService {
       const txResult = await this.prisma.$transaction(async (tx) => {
         // Advisory lock — non-blocking, transaction-scoped
         // Lock key: date-derived bigint unique per calendar date
-        const lockKey = ADVISORY_LOCK_BASE + BigInt(dateStr.replace(/-/g, ''));
+        const lockKey = ADVISORY_LOCK_BASE + BigInt(dateStr.replaceAll('-', ''));
         const [{ result: locked }] = await tx.$queryRaw<[{ result: boolean }]>`
           SELECT pg_try_advisory_xact_lock(${lockKey}::bigint) AS result
         `;

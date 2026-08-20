@@ -100,8 +100,7 @@ export function ReservationWidget({ variant }: Props) {
         aria-label="Barra de reserva"
       >
         <div className="flex items-center gap-3 px-4 py-3">
-          <button
-            type="button"
+          <button type="button"
             onClick={() => setPickerOpen((v) => !v)}
             className="flex-1 flex flex-col items-start text-left"
             aria-expanded={pickerOpen}
@@ -157,8 +156,7 @@ export function ReservationWidget({ variant }: Props) {
 
       {/* Date trigger + inline picker */}
       <div className="rounded-xl border border-warm-line overflow-hidden">
-        <button
-          type="button"
+        <button type="button"
           onClick={() => setPickerOpen((v) => !v)}
           className="w-full grid grid-cols-2 divide-x divide-warm-line text-left"
           aria-expanded={pickerOpen}
@@ -226,8 +224,7 @@ function GuestCounter({ adults, onChange }: GuestCounterProps) {
     <div className="flex items-center justify-between mt-1">
       <span className="text-sm text-ink-1">Adultos</span>
       <div className="flex items-center gap-3">
-        <button
-          type="button"
+        <button type="button"
           onClick={() => onChange(adults - 1)}
           disabled={adults <= 1}
           className="h-8 w-8 rounded-full border border-warm-line-strong flex items-center justify-center text-ink-2 disabled:opacity-40 disabled:cursor-not-allowed"
@@ -238,8 +235,7 @@ function GuestCounter({ adults, onChange }: GuestCounterProps) {
         <span className="font-mono text-sm w-4 text-center" aria-live="polite">
           {adults}
         </span>
-        <button
-          type="button"
+        <button type="button"
           onClick={() => onChange(adults + 1)}
           disabled={adults >= 10}
           className="h-8 w-8 rounded-full border border-warm-line-strong flex items-center justify-center text-ink-2 disabled:opacity-40 disabled:cursor-not-allowed"

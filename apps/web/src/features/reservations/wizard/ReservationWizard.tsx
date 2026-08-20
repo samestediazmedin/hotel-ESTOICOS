@@ -53,7 +53,7 @@ export function ReservationWizard() {
             Nueva reserva
           </h1>
 
-          <button
+          <button type="button"
             onClick={closeWizard}
             className="text-ink-3 hover:text-ink-1 transition-colors mt-1 p-1 rounded-md hover:bg-warm-paper"
             aria-label="Cerrar"

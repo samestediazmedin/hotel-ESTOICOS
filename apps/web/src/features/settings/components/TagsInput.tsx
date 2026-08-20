@@ -37,8 +37,7 @@ export function TagsInput({ value, onChange, max = 8 }: TagsInputProps) {
           className="flex items-center gap-1 bg-warm-cream text-ink-2 rounded-full px-2 py-0.5 text-xs"
         >
           {tag}
-          <button
-            type="button"
+          <button type="button"
             onClick={() => onChange(value.filter((t) => t !== tag))}
             aria-label={`Eliminar etiqueta ${tag}`}
             className="hover:text-terracotta transition-colors"

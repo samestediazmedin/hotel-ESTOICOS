@@ -158,7 +158,7 @@ export function PhotoUploader({ roomId }: PhotoUploaderProps) {
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
-              <button
+              <button type="button"
                 onClick={() => handleDeletePhoto(photo.id)}
                 disabled={deleteMutation.isPending}
                 className="absolute inset-0 flex items-center justify-center bg-warm-white-strong/60 opacity-0 group-hover:opacity-100 transition-opacity"

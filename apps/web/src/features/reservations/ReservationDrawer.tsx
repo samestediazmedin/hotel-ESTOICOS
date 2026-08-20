@@ -273,7 +273,7 @@ function ReservationDrawerContent({
             {statusLabel}
           </span>
         </div>
-        <button
+        <button type="button"
           onClick={onClose}
           className="text-ink-3 hover:text-ink-1 transition-colors"
           aria-label="Cerrar"
@@ -285,7 +285,7 @@ function ReservationDrawerContent({
       {/* Tab navigation (button-group, NOT shadcn Tabs) */}
       <div className="flex border-b border-warm-line px-6 overflow-x-auto">
         {TABS.map((tab) => (
-          <button
+          <button type="button"
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex-shrink-0 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${

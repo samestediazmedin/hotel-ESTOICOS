@@ -99,7 +99,7 @@ export function TaskAssignmentDrawer({ room, onClose }: TaskAssignmentDrawerProp
           <h2 className="text-xl font-semibold text-ink-1">
             Asignar tarea — Hab. {room.number}
           </h2>
-          <button
+          <button type="button"
             onClick={onClose}
             className="text-ink-3 hover:text-ink-2 text-xl leading-none"
             aria-label="Cerrar"

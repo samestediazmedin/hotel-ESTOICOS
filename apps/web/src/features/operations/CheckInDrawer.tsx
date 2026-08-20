@@ -133,7 +133,7 @@ export function CheckInDrawer({ reservation, open, onClose }: CheckInDrawerProps
               {reservation.guest?.fullName ?? '—'} — Hab. {reservation.room?.number ?? '—'}
             </p>
           </div>
-          <button
+          <button type="button"
             onClick={handleClose}
             className="text-ink-3 hover:text-ink-1 transition-colors"
             aria-label="Cerrar"

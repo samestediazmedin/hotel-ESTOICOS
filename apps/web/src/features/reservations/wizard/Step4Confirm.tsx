@@ -212,8 +212,7 @@ export function Step4Confirm() {
           {conflictError && (
             <p className="text-xs text-terracotta">{conflictError}</p>
           )}
-          <button
-            type="button"
+          <button type="button"
             onClick={handleSearchAnotherRoom}
             className="text-sm text-terracotta-deep underline hover:no-underline self-start"
           >

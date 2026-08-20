@@ -54,8 +54,8 @@ export class GuestsController {
     @Query('take') take?: string,
     @CurrentUser() user?: JwtPayload,
   ) {
-    const skipN = skip ? parseInt(skip, 10) : 0;
-    const takeN = take ? parseInt(take, 10) : 50;
+    const skipN = skip ? Number.parseInt(skip, 10) : 0;
+    const takeN = take ? Number.parseInt(take, 10) : 50;
     const guests = await this.guestsService.findAll(skipN, takeN, search);
 
     if (user?.role === 'HOUSEKEEPING') {

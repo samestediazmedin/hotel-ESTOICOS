@@ -140,7 +140,7 @@ export function FolioPage() {
             </span>
           )}
           {/* Descargar PDF — disabled when OPEN (backend also enforces SETTLED-only) */}
-          <button
+          <button type="button"
             onClick={() => void handleDownloadPdf()}
             disabled={folio.isOpen || isPdfLoading}
             title={
@@ -252,7 +252,7 @@ export function FolioPage() {
                     {folio.isOpen && (
                       <td className="px-3 py-3">
                         {item.type !== 'VOID' && !item.voidedByEntryId && (
-                          <button
+                          <button type="button"
                             onClick={() => voidMutation.mutate(item.id)}
                             disabled={voidMutation.isPending}
                             className="text-xs text-ink-3 hover:text-red-600 transition-colors"

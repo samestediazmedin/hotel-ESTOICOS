@@ -93,8 +93,7 @@ export function ConciergeFab() {
             text-sm leading-relaxed text-ink-2
           "
         >
-          <button
-            type="button"
+          <button type="button"
             onClick={dismissBubble}
             aria-label="Cerrar sugerencia del concierge"
             className="
@@ -110,8 +109,7 @@ export function ConciergeFab() {
             <X className="w-3.5 h-3.5" />
           </button>
 
-          <button
-            type="button"
+          <button type="button"
             onClick={handleOpenDrawer}
             className="text-left cursor-pointer"
           >
@@ -142,8 +140,7 @@ export function ConciergeFab() {
           "
         />
 
-        <button
-          type="button"
+        <button type="button"
           onClick={handleOpenDrawer}
           aria-label="Abrir concierge — asistente virtual del hotel"
           className="

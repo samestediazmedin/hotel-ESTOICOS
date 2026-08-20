@@ -189,8 +189,7 @@ export function Step2Room() {
                       </span>
                     </div>
                   </div>
-                  <button
-                    type="button"
+                  <button type="button"
                     onClick={() => handleSelectRoom(room)}
                     className="flex-shrink-0 px-4 py-2 rounded-md bg-terracotta text-warm-white text-sm font-medium hover:bg-terracotta-deep transition-colors focus:outline-none focus:ring-2 focus:ring-terracotta focus:ring-offset-1"
                   >
@@ -262,8 +261,7 @@ export function Step2Room() {
                         </span>
                       </div>
                     </div>
-                    <button
-                      type="button"
+                    <button type="button"
                       onClick={() => handleSelectType(type)}
                       className="flex-shrink-0 px-4 py-2 rounded-md bg-mustard text-ink-1 text-sm font-medium hover:bg-mustard-deep hover:text-warm-white transition-colors focus:outline-none focus:ring-2 focus:ring-mustard focus:ring-offset-1"
                     >

@@ -154,22 +154,19 @@ export function ReservationsPage() {
         <div className="flex items-center gap-2">
           {/* Window navigation */}
           <div className="flex items-center gap-1 border border-warm-line rounded-md overflow-hidden">
-            <button
-              type="button"
+            <button type="button"
               onClick={goBack}
               className="px-3 py-1.5 text-sm text-ink-2 hover:bg-warm-cream transition-colors"
             >
               ← Anterior
             </button>
-            <button
-              type="button"
+            <button type="button"
               onClick={goToday}
               className="px-3 py-1.5 text-sm text-ink-2 hover:bg-warm-cream border-x border-warm-line transition-colors"
             >
               Hoy
             </button>
-            <button
-              type="button"
+            <button type="button"
               onClick={goForward}
               className="px-3 py-1.5 text-sm text-ink-2 hover:bg-warm-cream transition-colors"
             >
@@ -206,8 +203,7 @@ export function ReservationsPage() {
               </p>
             </div>
           </div>
-          <button
-            type="button"
+          <button type="button"
             onClick={() => { setShowListView(true); setStatusFilter('PENDING'); }}
             className="text-xs px-3 py-1.5 rounded-md bg-yellow-200 text-yellow-900 hover:bg-yellow-300 font-medium transition-colors"
           >
@@ -231,9 +227,8 @@ export function ReservationsPage() {
             const isActive = statusFilter === s;
             const isPending = s === 'PENDING';
             return (
-              <button
+              <button type="button"
                 key={s}
-                type="button"
                 onClick={() => setStatusFilter(s)}
                 className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
                   isActive
@@ -304,8 +299,7 @@ export function ReservationsPage() {
                       <div className="flex items-center gap-2">
                         {/* Check-in button — only for CONFIRMED reservations */}
                         {res.status === 'CONFIRMED' && (
-                          <button
-                            type="button"
+                          <button type="button"
                             onClick={() => setCheckInReservation(res)}
                             className="text-xs px-2.5 py-1 rounded-md bg-terracotta text-white hover:opacity-90 transition-opacity font-medium"
                           >
@@ -315,8 +309,7 @@ export function ReservationsPage() {
                         {/* Check-out button — only for CHECKED_IN reservations */}
                         {res.status === 'CHECKED_IN' && (
                           <>
-                            <button
-                              type="button"
+                            <button type="button"
                               onClick={() => setCheckOutReservation(res)}
                               className="text-xs px-2.5 py-1 rounded-md border border-warm-line-strong text-ink-2 hover:bg-warm-cream transition-colors font-medium"
                             >

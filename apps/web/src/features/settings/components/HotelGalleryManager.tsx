@@ -142,8 +142,7 @@ export function HotelGalleryManager() {
           className="rounded-md bg-terracotta/10 border border-terracotta/30 text-terracotta px-3 py-2 text-sm flex items-center justify-between"
         >
           <span>No se pudo cargar la galería. {error?.message}</span>
-          <button
-            type="button"
+          <button type="button"
             onClick={() => refetch()}
             className="underline hover:no-underline ml-4 shrink-0"
           >

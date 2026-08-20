@@ -40,3 +40,13 @@ coverage/
 playwright-report/
 test-results/
 blob-report/
+.scannerwork/
+issues.json
+.scannerwork/
+issues.json
+
+# SonarQube
+.scannerwork/
+issues.json
+q.json
+issues2.json

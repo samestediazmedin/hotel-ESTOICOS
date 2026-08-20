@@ -50,8 +50,7 @@ export function HeroGalleryLightbox({ photos, startIndex, onClose }: HeroGallery
   return (
     <>
       {/* Backdrop */}
-      <button
-        type="button"
+      <button type="button"
         aria-label="Cerrar"
         className="fixed inset-0 z-40 bg-ink-1/80 backdrop-blur-sm"
         onClick={onClose}
@@ -69,8 +68,7 @@ export function HeroGalleryLightbox({ photos, startIndex, onClose }: HeroGallery
           <span className="text-warm-white/70 text-sm font-mono">
             {activeIdx + 1} / {photos.length}
           </span>
-          <button
-            type="button"
+          <button type="button"
             aria-label="Cerrar"
             onClick={onClose}
             className="text-warm-white/70 hover:text-warm-white transition-colors"
@@ -89,16 +87,14 @@ export function HeroGalleryLightbox({ photos, startIndex, onClose }: HeroGallery
 
           {photos.length > 1 && (
             <>
-              <button
-                type="button"
+              <button type="button"
                 onClick={prev}
                 aria-label="Foto anterior"
                 className="absolute left-3 top-1/2 -translate-y-1/2 bg-warm-white/90 hover:bg-warm-white rounded-full p-2.5 shadow-md transition-colors"
               >
                 <ChevronLeft className="w-5 h-5 text-ink-1" />
               </button>
-              <button
-                type="button"
+              <button type="button"
                 onClick={next}
                 aria-label="Foto siguiente"
                 className="absolute right-3 top-1/2 -translate-y-1/2 bg-warm-white/90 hover:bg-warm-white rounded-full p-2.5 shadow-md transition-colors"
@@ -113,9 +109,8 @@ export function HeroGalleryLightbox({ photos, startIndex, onClose }: HeroGallery
         {photos.length > 1 && (
           <div className="flex gap-2 overflow-x-auto px-4 py-3 bg-ink-1/95 shrink-0">
             {photos.map((p, i) => (
-              <button
+              <button type="button"
                 key={p.url}
-                type="button"
                 onClick={() => setActiveIdx(i)}
                 className={
                   'shrink-0 w-20 h-20 rounded-md overflow-hidden border-2 transition-opacity ' +

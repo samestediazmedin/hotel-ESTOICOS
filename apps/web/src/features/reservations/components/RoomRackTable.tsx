@@ -550,8 +550,7 @@ export function RoomRackTable({
                       }
                     >
                       {/* Empty cell click target */}
-                      <button
-                        type="button"
+                      <button type="button"
                         className="absolute inset-0 w-full h-full hover:bg-warm-cream cursor-pointer transition-colors focus:outline-none focus:ring-1 focus:ring-terracotta"
                         onClick={() => onEmptyCellClick(date, room.id)}
                         aria-label={`Crear reserva en ${date} para habitación ${room.number}`}
@@ -599,8 +598,7 @@ export function RoomRackTable({
                           `${guestName} · ${shortDateEs(resToRender.checkInDate)} → ${shortDateEs(resToRender.checkOutDate)} · ${nights} ${nights === 1 ? 'noche' : 'noches'} · ${statusLabel}`;
 
                         return (
-                          <button
-                            type="button"
+                          <button type="button"
                             key={resToRender.id}
                             data-testid="rack-event-chip"
                             data-status={resToRender.status}
