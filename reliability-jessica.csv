@@ -1,0 +1,96 @@
+#,Archivo,Linea,Regla,Severidad,Mensaje
+1,apps/api/src/modules/concierge/admin/csv-import.service.ts,53,typescript:S7781,LOW,Prefer `String#replaceAll()` over `String#replace()`.
+2,apps/api/src/modules/concierge/admin/csv-import.service.ts,54,typescript:S7781,LOW,Prefer `String#replaceAll()` over `String#replace()`.
+3,apps/api/src/modules/email/email.service.ts,245,typescript:S7781,LOW,Prefer `String#replaceAll()` over `String#replace()`.
+4,apps/api/src/modules/email/email.service.ts,246,typescript:S7781,LOW,Prefer `String#replaceAll()` over `String#replace()`.
+5,apps/api/src/modules/email/email.service.ts,247,typescript:S7781,LOW,Prefer `String#replaceAll()` over `String#replace()`.
+6,apps/api/src/modules/email/email.service.ts,248,typescript:S7781,LOW,Prefer `String#replaceAll()` over `String#replace()`.
+7,apps/api/src/modules/email/email.service.ts,249,typescript:S7781,LOW,Prefer `String#replaceAll()` over `String#replace()`.
+8,apps/api/src/modules/folio/pdf/format-cop.ts,26,typescript:S8786,MEDIUM,"Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking."
+9,apps/api/src/modules/guest-contact/guest-contact.controller.ts,69,typescript:S7773,MEDIUM,Prefer `Number.parseInt` over `parseInt`.
+10,apps/api/src/modules/guests/guests.controller.ts,57,typescript:S7773,MEDIUM,Prefer `Number.parseInt` over `parseInt`.
+11,apps/api/src/modules/guests/guests.controller.ts,58,typescript:S7773,MEDIUM,Prefer `Number.parseInt` over `parseInt`.
+12,apps/api/src/modules/night-audit/night-audit.service.ts,135,typescript:S7781,LOW,Prefer `String#replaceAll()` over `String#replace()`.
+13,apps/api/src/modules/pricing/pricing.service.ts,46,typescript:S6959,MEDIUM,"Add an initial value to this ""reduce()"" call."
+14,apps/api/src/modules/pricing/pricing.service.ts,75,typescript:S6959,MEDIUM,"Add an initial value to this ""reduce()"" call."
+15,apps/api/src/modules/public-portal/dto/rate-options-query.dto.ts,22,typescript:S7773,MEDIUM,Prefer `Number.parseInt` over `parseInt`.
+16,apps/api/src/modules/tra-export/tra-export.service.ts,61,typescript:S7781,LOW,Prefer `String#replaceAll()` over `String#replace()`.
+17,apps/api/src/prisma/prisma.service.ts,20,typescript:S7773,MEDIUM,Prefer `Number.parseInt` over `parseInt`.
+18,apps/api/src/seed/seed-admin.command.ts,83,typescript:S7773,MEDIUM,Prefer `Number.parseFloat` over `parseFloat`.
+19,apps/api/src/seed/seed-admin.command.ts,84,typescript:S7773,MEDIUM,Prefer `Number.isNaN` over `isNaN`.
+20,apps/web/src/components/ui/card.tsx,27,typescript:S6850,MEDIUM,Headings must have content and the content must be accessible by a screen reader.
+21,apps/web/src/features/admin/UserFormDrawer.tsx,79,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+22,apps/web/src/features/ai-assistant/RichToolResult.tsx,21,typescript:S7773,MEDIUM,Prefer `Number.parseFloat` over `parseFloat`.
+23,apps/web/src/features/ai-assistant/RichToolResult.tsx,22,typescript:S7773,MEDIUM,Prefer `Number.isNaN` over `isNaN`.
+24,apps/web/src/features/concierge-admin/VenueDrawer.tsx,182,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+25,apps/web/src/features/concierge-admin/VenuesPage.tsx,144,typescript:S6772,LOW,Ambiguous spacing after previous element input
+26,apps/web/src/features/concierge/components/ConciergeHero.tsx,65,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+27,apps/web/src/features/guests/GuestDetailPage.tsx,92,typescript:S7773,MEDIUM,Prefer `Number.isNaN` over `isNaN`.
+28,apps/web/src/features/guests/GuestDetailPage.tsx,95,typescript:S7773,MEDIUM,Prefer `Number.isNaN` over `isNaN`.
+29,apps/web/src/features/guests/GuestDetailPage.tsx,211,typescript:S7773,MEDIUM,Prefer `Number.isNaN` over `isNaN`.
+30,apps/web/src/features/guests/GuestDetailPage.tsx,720,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+31,apps/web/src/features/guests/GuestDrawer.tsx,207,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+32,apps/web/src/features/guests/GuestDrawer.tsx,219,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+33,apps/web/src/features/housekeeping/RoomStatusModal.tsx,69,typescript:S1082,LOW,"Visible, non-interactive elements with click handlers must have at least one keyboard listener."
+34,apps/web/src/features/housekeeping/RoomStatusModal.tsx,69,typescript:S6848,MEDIUM,"Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element."
+35,apps/web/src/features/housekeeping/RoomStatusModal.tsx,74,typescript:S6848,MEDIUM,"Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element."
+36,apps/web/src/features/housekeeping/RoomStatusModal.tsx,74,typescript:S1082,LOW,"Visible, non-interactive elements with click handlers must have at least one keyboard listener."
+37,apps/web/src/features/housekeeping/RoomStatusModal.tsx,107,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+38,apps/web/src/features/housekeeping/RoomStatusModal.tsx,128,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+39,apps/web/src/features/housekeeping/TaskAssignmentDrawer.tsx,87,typescript:S6848,MEDIUM,"Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element."
+40,apps/web/src/features/housekeeping/TaskAssignmentDrawer.tsx,87,typescript:S1082,LOW,"Visible, non-interactive elements with click handlers must have at least one keyboard listener."
+41,apps/web/src/features/housekeeping/TaskAssignmentDrawer.tsx,102,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+42,apps/web/src/features/housekeeping/TaskAssignmentDrawer.tsx,117,typescript:S6853,MEDIUM,A form label must be associated with a control.
+43,apps/web/src/features/housekeeping/TaskAssignmentDrawer.tsx,150,typescript:S6853,MEDIUM,A form label must be associated with a control.
+44,apps/web/src/features/housekeeping/TaskAssignmentDrawer.tsx,184,typescript:S6853,MEDIUM,A form label must be associated with a control.
+45,apps/web/src/features/inventory/RoomDrawer.tsx,218,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+46,apps/web/src/features/inventory/RoomDrawer.tsx,230,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+47,apps/web/src/features/inventory/RoomTypeDrawer.tsx,136,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+48,apps/web/src/features/inventory/RoomTypesPage.tsx,162,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+49,apps/web/src/features/inventory/RoomTypesPage.tsx,170,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+50,apps/web/src/features/inventory/RoomTypesPage.tsx,181,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+51,apps/web/src/features/inventory/RoomTypesPage.tsx,188,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+52,apps/web/src/features/inventory/RoomTypesPage.tsx,196,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+53,apps/web/src/features/inventory/components/PhotoUploader.tsx,161,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+54,apps/web/src/features/inventory/components/RoomTypePhotosManager.tsx,185,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+55,apps/web/src/features/operations/CheckInDrawer.tsx,136,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+56,apps/web/src/features/operations/CheckInDrawer.tsx,173,typescript:S6853,MEDIUM,A form label must have accessible text.
+57,apps/web/src/features/operations/FolioPage.tsx,143,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+58,apps/web/src/features/operations/FolioPage.tsx,255,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+59,apps/web/src/features/operations/PostChargeModal.tsx,116,typescript:S6853,MEDIUM,A form label must be associated with a control.
+60,apps/web/src/features/operations/PostChargeModal.tsx,132,typescript:S6853,MEDIUM,A form label must be associated with a control.
+61,apps/web/src/features/operations/PostChargeModal.tsx,144,typescript:S6853,MEDIUM,A form label must be associated with a control.
+62,apps/web/src/features/operations/PostChargeModal.tsx,161,typescript:S6853,MEDIUM,A form label must be associated with a control.
+63,apps/web/src/features/pricing/RatePlanDrawer.tsx,296,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+64,apps/web/src/features/pricing/RatePlansPage.tsx,169,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+65,apps/web/src/features/pricing/RatePlansPage.tsx,176,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+66,apps/web/src/features/pricing/SeasonDrawer.tsx,168,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+67,apps/web/src/features/pricing/SeasonsPage.tsx,221,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+68,apps/web/src/features/pricing/SeasonsPage.tsx,227,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+69,apps/web/src/features/public-booking/BookingConfirmationPage.tsx,26,typescript:S7773,MEDIUM,Prefer `Number.parseFloat` over `parseFloat`.
+70,apps/web/src/features/public-booking/BookingFormPage.tsx,77,typescript:S7773,MEDIUM,Prefer `Number.parseInt` over `parseInt`.
+71,apps/web/src/features/public-booking/BookingFormPage.tsx,78,typescript:S7773,MEDIUM,Prefer `Number.parseFloat` over `parseFloat`.
+72,apps/web/src/features/public-booking/BookingFormPage.tsx,315,typescript:S6853,MEDIUM,A form label must be associated with a control.
+73,apps/web/src/features/public-booking/BookingFormPage.tsx,318,typescript:S6772,LOW,Ambiguous spacing after previous element input
+74,apps/web/src/features/public-booking/BookingFormPage.tsx,322,typescript:S6772,LOW,Ambiguous spacing after previous element input
+75,apps/web/src/features/public-booking/BookingFormPage.tsx,326,typescript:S6772,LOW,Ambiguous spacing after previous element input
+76,apps/web/src/features/public-booking/BookingFormPage.tsx,334,typescript:S6853,MEDIUM,A form label must be associated with a control.
+77,apps/web/src/features/public-booking/BookingFormPage.tsx,337,typescript:S6772,LOW,Ambiguous spacing after previous element input
+78,apps/web/src/features/public-booking/BookingFormPage.tsx,341,typescript:S6772,LOW,Ambiguous spacing after previous element input
+79,apps/web/src/features/public-booking/BookingResultsPage.tsx,140,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+80,apps/web/src/features/public-booking/BookingResultsPage.tsx,195,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+81,apps/web/src/features/public-booking/BookingResultsPage.tsx,344,typescript:S7773,MEDIUM,Prefer `Number.parseInt` over `parseInt`.
+82,apps/web/src/features/public-portal/components/OffersSection.tsx,102,typescript:S1082,LOW,"Visible, non-interactive elements with click handlers must have at least one keyboard listener."
+83,apps/web/src/features/public-portal/components/OffersSection.tsx,102,typescript:S6848,MEDIUM,"Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element."
+84,apps/web/src/features/public-portal/hooks/useReservationDraft.ts,25,typescript:S7773,MEDIUM,Prefer `Number.parseInt` over `parseInt`.
+85,apps/web/src/features/reporting/ReportExportPage.tsx,181,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+86,apps/web/src/features/reporting/ReportExportPage.tsx,194,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+87,apps/web/src/features/reporting/ReportExportPage.tsx,207,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+88,apps/web/src/features/reservations/ReservationDrawer.tsx,276,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+89,apps/web/src/features/reservations/ReservationDrawer.tsx,288,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+90,apps/web/src/features/reservations/ReservationDrawer.tsx,614,typescript:S6853,MEDIUM,A form label must be associated with a control.
+91,apps/web/src/features/reservations/ReservationDrawer.tsx,633,typescript:S6853,MEDIUM,A form label must be associated with a control.
+92,apps/web/src/features/reservations/components/RoomRackTable.tsx,656,typescript:S6847,LOW,Non-interactive elements should not be assigned mouse or keyboard event listeners.
+93,apps/web/src/features/reservations/components/RoomRackTable.tsx,656,typescript:S1082,LOW,"Visible, non-interactive elements with click handlers must have at least one keyboard listener."
+94,apps/web/src/features/reservations/wizard/ReservationWizard.tsx,56,typescript:S9011,MEDIUM,"Add an explicit ""type"" attribute to this button."
+95,apps/web/src/features/review-submit/components/ReviewForm.tsx,68,typescript:S6853,MEDIUM,A form label must be associated with a control.
