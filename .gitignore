@@ -44,3 +44,7 @@ blob-report/
 issues.json
 .scannerwork/
 issues.json
+
+# SonarQube
+.scannerwork/
+issues.json
