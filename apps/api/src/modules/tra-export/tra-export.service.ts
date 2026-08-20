@@ -58,7 +58,7 @@ function fmtDate(d: Date): string {
  *  - Escape any internal double-quote as "" (two double-quotes)
  */
 function escapeCell(value: string): string {
-  return `"${String(value).replaceAll(/"/g, '""')}"`;
+  return `"${String(value).replaceAll('"', '""')}"`;
 }
 
 @Injectable()
