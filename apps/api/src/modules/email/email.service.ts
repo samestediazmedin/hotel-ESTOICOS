@@ -1,19 +1,19 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Resend } from 'resend';
+import { Injectable, Logger } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { Resend } from "resend";
 
 export interface BookingConfirmationParams {
   to: string;
   guestName: string;
   reservationId: string;
-  checkIn: string;    // "YYYY-MM-DD"
-  checkOut: string;   // "YYYY-MM-DD"
+  checkIn: string; // "YYYY-MM-DD"
+  checkOut: string; // "YYYY-MM-DD"
   roomTypeName: string;
   totalNights: number;
   total: number;
   // Phase 15 — guest preferences (all optional, all nullable — GCC-05)
   guestWhatsApp?: string | null;
-  guestContactPreference?: 'EMAIL' | 'PHONE' | 'WHATSAPP' | null;
+  guestContactPreference?: "EMAIL" | "PHONE" | "WHATSAPP" | null;
   guestDietaryRestrictions?: string | null;
   guestSpecialRequests?: string | null;
 }
@@ -24,8 +24,8 @@ export interface PreArrivalReminderParams {
   hotelName: string;
   hotelAddress?: string | null;
   hotelPhone?: string | null;
-  checkInDate: string;    // "YYYY-MM-DD"
-  checkOutDate: string;   // "YYYY-MM-DD"
+  checkInDate: string; // "YYYY-MM-DD"
+  checkOutDate: string; // "YYYY-MM-DD"
   roomTypeName: string;
   totalNights: number;
   specialRequests?: string | null;
@@ -35,8 +35,8 @@ export interface ReviewInviteParams {
   to: string;
   guestName: string;
   hotelName: string;
-  stayDate: string;    // "YYYY-MM-DD"
-  reviewLink: string;  // full URL: https://hotel.co/review/submit?token=...
+  stayDate: string; // "YYYY-MM-DD"
+  reviewLink: string; // full URL: https://hotel.co/review/submit?token=...
 }
 
 /**
@@ -55,8 +55,8 @@ export class EmailService {
   private readonly logger = new Logger(EmailService.name);
 
   constructor(private readonly config: ConfigService) {
-    this.resend = new Resend(this.config.getOrThrow<string>('RESEND_API_KEY'));
-    this.fromEmail = this.config.getOrThrow<string>('RESEND_FROM_EMAIL');
+    this.resend = new Resend(this.config.getOrThrow<string>("RESEND_API_KEY"));
+    this.fromEmail = this.config.getOrThrow<string>("RESEND_FROM_EMAIL");
   }
 
   /**
@@ -66,7 +66,9 @@ export class EmailService {
    * Use with `void` at the call site:
    *   void this.emailService.sendBookingConfirmation(params);
    */
-  async sendBookingConfirmation(params: BookingConfirmationParams): Promise<void> {
+  async sendBookingConfirmation(
+    params: BookingConfirmationParams,
+  ): Promise<void> {
     try {
       await this.resend.emails.send({
         from: this.fromEmail,
@@ -89,7 +91,9 @@ export class EmailService {
    * Fire-and-forget safe: catches all errors internally and never throws.
    * The cron loop handles failures by not marking the reminder as sent.
    */
-  async sendPreArrivalReminder(params: PreArrivalReminderParams): Promise<void> {
+  async sendPreArrivalReminder(
+    params: PreArrivalReminderParams,
+  ): Promise<void> {
     try {
       await this.resend.emails.send({
         from: this.fromEmail,
@@ -106,28 +110,30 @@ export class EmailService {
     }
   }
 
-  private buildPreArrivalReminderHtml(params: PreArrivalReminderParams): string {
+  private buildPreArrivalReminderHtml(
+    params: PreArrivalReminderParams,
+  ): string {
     const formatDate = (iso: string) => {
-      const d = new Date(iso + 'T12:00:00.000Z');
-      return d.toLocaleDateString('es-CO', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        timeZone: 'UTC',
+      const d = new Date(iso + "T12:00:00.000Z");
+      return d.toLocaleDateString("es-CO", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "UTC",
       });
     };
 
     const specialRequestsHtml = params.specialRequests
       ? `<p style="font-size:14px;color:#5a4d3f;margin:6px 0;"><strong>Solicitudes especiales:</strong> ${this.escapeHtml(params.specialRequests)}</p>`
-      : '';
+      : "";
 
     const addressHtml = params.hotelAddress
       ? `<p style="font-size:14px;color:#5a4d3f;margin:6px 0;"><strong>Dirección:</strong> ${this.escapeHtml(params.hotelAddress)}</p>`
-      : '';
+      : "";
 
     const phoneHtml = params.hotelPhone
       ? `<p style="font-size:14px;color:#5a4d3f;margin:6px 0;"><strong>Teléfono:</strong> ${this.escapeHtml(params.hotelPhone)}</p>`
-      : '';
+      : "";
 
     return `<!DOCTYPE html>
 <html lang="es">
@@ -183,22 +189,19 @@ export class EmailService {
         html: this.buildReviewInviteHtml(params),
       });
     } catch (err) {
-      this.logger.error(
-        `Failed to send review invite to ${params.to}`,
-        err,
-      );
+      this.logger.error(`Failed to send review invite to ${params.to}`, err);
       throw err; // CRITICAL: re-throw so cron skips marking reviewInviteSentAt
     }
   }
 
   private buildReviewInviteHtml(params: ReviewInviteParams): string {
     const formatDate = (iso: string) => {
-      const d = new Date(iso + 'T12:00:00.000Z');
-      return d.toLocaleDateString('es-CO', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        timeZone: 'UTC',
+      const d = new Date(iso + "T12:00:00.000Z");
+      return d.toLocaleDateString("es-CO", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "UTC",
       });
     };
 
@@ -242,21 +245,23 @@ export class EmailService {
    */
   private escapeHtml(str: string): string {
     return str
-      .replaceAll(/&/g, '&amp;')
-      .replaceAll(/</g, '&lt;')
-      .replaceAll(/>/g, '&gt;')
-      .replaceAll(/"/g, '&quot;')
-      .replaceAll(/'/g, '&#039;');
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
   }
 
   /**
    * Map ContactPreference enum value to human-readable Spanish label.
    */
-  private formatContactPreference(pref: 'EMAIL' | 'PHONE' | 'WHATSAPP'): string {
-    const labels: Record<'EMAIL' | 'PHONE' | 'WHATSAPP', string> = {
-      EMAIL: 'Correo electrónico',
-      PHONE: 'Teléfono',
-      WHATSAPP: 'WhatsApp',
+  private formatContactPreference(
+    pref: "EMAIL" | "PHONE" | "WHATSAPP",
+  ): string {
+    const labels: Record<"EMAIL" | "PHONE" | "WHATSAPP", string> = {
+      EMAIL: "Correo electrónico",
+      PHONE: "Teléfono",
+      WHATSAPP: "WhatsApp",
     };
     return labels[pref];
   }
@@ -292,29 +297,29 @@ export class EmailService {
       );
     }
 
-    if (parts.length === 0) return '';
+    if (parts.length === 0) return "";
 
     return `<div style="margin-top:24px;padding:16px;background:#f4efe6;border-radius:8px;">
   <h2 style="font-family:'Instrument Serif',Georgia,serif;font-size:18px;color:#2a221a;margin:0 0 12px;font-weight:normal;">Sus preferencias</h2>
-  ${parts.join('\n  ')}
+  ${parts.join("\n  ")}
 </div>`;
   }
 
   private buildConfirmationHtml(params: BookingConfirmationParams): string {
     const formatDate = (iso: string) => {
-      const d = new Date(iso + 'T12:00:00.000Z');
-      return d.toLocaleDateString('es-CO', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        timeZone: 'UTC',
+      const d = new Date(iso + "T12:00:00.000Z");
+      return d.toLocaleDateString("es-CO", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "UTC",
       });
     };
 
     const formatCOP = (amount: number) =>
-      new Intl.NumberFormat('es-CO', {
-        style: 'currency',
-        currency: 'COP',
+      new Intl.NumberFormat("es-CO", {
+        style: "currency",
+        currency: "COP",
         maximumFractionDigits: 0,
       }).format(amount);
 
