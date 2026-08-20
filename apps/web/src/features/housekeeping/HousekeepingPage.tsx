@@ -160,7 +160,6 @@ export function HousekeepingPage() {
                 {rooms.map((room) => (
                   <button type="button"
                     key={room.id}
-                    type="button"
                     onClick={() => setSelectedRoom(room)}
                     className="w-full text-left bg-warm-white border border-warm-line rounded-lg p-3 cursor-pointer hover:shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-terracotta"
                     data-testid={`room-card-${room.number}`}

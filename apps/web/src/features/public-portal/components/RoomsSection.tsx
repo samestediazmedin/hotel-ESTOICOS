@@ -39,7 +39,6 @@ export function RoomsSection({ rooms, ivaContext }: RoomsSectionProps) {
           return (
             <button type="button"
               key={room.id}
-              type="button"
               onClick={() => setSelected(room)}
               aria-label={`Ver detalle de ${room.name}`}
               className={cardClass}

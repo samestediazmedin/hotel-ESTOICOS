@@ -65,7 +65,6 @@ export function TopNav({ hotelName, onNavClick, onConciergeClick, showOffers = f
               return (
                 <button type="button"
                   key={id}
-                  type="button"
                   onClick={onConciergeClick}
                   className="text-sm text-ink-2 hover:text-ink-1 transition-colors"
                 >
@@ -76,7 +75,6 @@ export function TopNav({ hotelName, onNavClick, onConciergeClick, showOffers = f
             return (
               <button type="button"
                 key={id}
-                type="button"
                 onClick={() => onNavClick(id)}
                 className="text-sm text-ink-2 hover:text-ink-1 transition-colors"
               >

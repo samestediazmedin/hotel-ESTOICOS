@@ -136,7 +136,6 @@ export function RoomsPage() {
           {rooms.map((room) => (
             <button type="button"
               key={room.id}
-              type="button"
               onClick={() => openDetail(room)}
               aria-label={`Habitación ${room.number}, ${room.roomType?.name ?? 'Sin tipo'}`}
               className="bg-warm-white border border-warm-line rounded-xl overflow-hidden text-left hover:border-warm-line-strong hover:shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-terracotta"

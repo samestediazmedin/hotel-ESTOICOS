@@ -229,7 +229,6 @@ export function ReservationsPage() {
             return (
               <button type="button"
                 key={s}
-                type="button"
                 onClick={() => setStatusFilter(s)}
                 className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
                   isActive

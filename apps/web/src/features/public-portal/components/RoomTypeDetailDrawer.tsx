@@ -120,7 +120,6 @@ export function RoomTypeDetailDrawer({ room, ivaContext, onClose }: RoomTypeDeta
               {room.photos.map((p, i) => (
                 <button type="button"
                   key={p.url}
-                  type="button"
                   onClick={() => setActiveIdx(i)}
                   className={
                     'shrink-0 w-20 h-20 rounded-md overflow-hidden border-2 transition-opacity ' +

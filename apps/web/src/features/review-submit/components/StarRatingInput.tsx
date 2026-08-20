@@ -58,7 +58,6 @@ export function StarRatingInput({ value, onChange, disabled }: StarRatingInputPr
         return (
           <button type="button"
             key={idx}
-            type="button"
             role="radio"
             aria-checked={value === idx}
             aria-label={`Dar ${idx} ${idx === 1 ? 'estrella' : 'estrellas'}`}
