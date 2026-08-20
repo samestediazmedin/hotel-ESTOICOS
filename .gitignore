@@ -48,3 +48,5 @@ issues.json
 # SonarQube
 .scannerwork/
 issues.json
+q.json
+issues2.json

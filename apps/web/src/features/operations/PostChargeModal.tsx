@@ -113,10 +113,11 @@ export function PostChargeModal({
           >
             {/* Description */}
             <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-ink-2">
+              <label htmlFor="pc-description" className="text-sm font-medium text-ink-2">
                 Descripción
               </label>
               <Input
+                id="pc-description"
                 type="text"
                 placeholder="Minibar, lavandería, etc."
                 {...register('description')}
@@ -129,8 +130,9 @@ export function PostChargeModal({
             {/* Quantity + Price */}
             <div className="flex gap-3">
               <div className="flex flex-col gap-1 w-24">
-                <label className="text-sm font-medium text-ink-2">Cantidad</label>
+                <label htmlFor="pc-quantity" className="text-sm font-medium text-ink-2">Cantidad</label>
                 <Input
+                  id="pc-quantity"
                   type="number"
                   min={1}
                   {...register('quantity', { valueAsNumber: true })}
@@ -141,10 +143,11 @@ export function PostChargeModal({
               </div>
 
               <div className="flex flex-col gap-1 flex-1">
-                <label className="text-sm font-medium text-ink-2">
+                <label htmlFor="pc-unitPrice" className="text-sm font-medium text-ink-2">
                   Precio unitario (COP)
                 </label>
                 <Input
+                  id="pc-unitPrice"
                   type="number"
                   min={0}
                   placeholder="50000"
@@ -158,10 +161,11 @@ export function PostChargeModal({
 
             {/* Tax rate */}
             <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-ink-2">
+              <label htmlFor="pc-taxRate" className="text-sm font-medium text-ink-2">
                 IVA (0 a 1, ej: 0.19 para 19%)
               </label>
               <Input
+                id="pc-taxRate"
                 type="number"
                 min={0}
                 max={1}
