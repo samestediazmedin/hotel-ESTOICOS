@@ -62,7 +62,7 @@ export function ConciergeHero({ onSelectQuery, disabled }: ConciergeHeroProps) {
       {/* Category mosaic — 2 col mobile, 3 col md+ */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full max-w-md">
         {CATEGORIES.map(({ icon: Icon, label, query }) => (
-          <button
+          <button type="button"
             key={label}
             onClick={() => onSelectQuery(query)}
             disabled={disabled}

@@ -76,7 +76,7 @@ export function UserFormDrawer({ isOpen, onClose, onSuccess }: UserFormDrawerPro
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-warm-line">
           <h2 className="text-ink-1 text-lg font-semibold">Nuevo usuario</h2>
-          <button
+          <button type="button"
             onClick={onClose}
             className="text-ink-3 hover:text-ink-1 transition-colors"
             aria-label="Cerrar"
